@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const AddItemForm = ({ onSuccess }) => {
+const InvAddItemForm = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
+    category: "",
     item_name: "",
     serial_number: "",
     status: "",
@@ -30,6 +31,24 @@ const AddItemForm = ({ onSuccess }) => {
     <div className="space-y-4">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
+          Category
+        </label>
+        <select
+          name="category"
+          value={formData.category}
+          onChange={handleChange}
+          className="w-full p-2 focus:outline-none border-b border-gray-300 focus:border-blue-500 rounded"
+        >
+          <option value="">... </option>
+          <option value="Headset">Headset</option>
+          <option value="Printer">Printer</option>
+          <option value="Mouse">Mouse</option>
+          <option value="Keyboard">Keyboard</option>
+          <option value="Monitor">Monitor</option>
+        </select>
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
           Item Name
         </label>
         <input
@@ -54,12 +73,17 @@ const AddItemForm = ({ onSuccess }) => {
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Status
         </label>
-        <input
+        <select
           name="status"
           value={formData.status}
           onChange={handleChange}
-          className="w-full p-2 focus:outline-none border-b border-gray-300 focus:border-blue-500"
-        />
+          className="w-full p-2 focus:outline-none border-b border-gray-300 focus:border-blue-500 rounded"
+        >
+          <option value="">...</option>
+          <option value="Working">Working</option>
+          <option value="Defective">Defective</option>
+          <option value="Missing">Missing</option>
+        </select>
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -94,4 +118,4 @@ const AddItemForm = ({ onSuccess }) => {
   );
 };
 
-export default AddItemForm;
+export default InvAddItemForm;

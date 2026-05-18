@@ -23,3 +23,43 @@ async def add_inventory_item(item: InventoryItem):
         "message": "Item added successfully",
         "item": inserted
     }
+
+
+# Controller function: handles DB logic
+async def list_inventory_items():
+    items_cursor = inventory_collection.find({})
+    items = []
+    async for item in items_cursor:
+        item["_id"] = str(item["_id"])  # ✅ stringify ObjectId
+        items.append(item)
+
+    # Group items by category
+    grouped = {}
+    for item in items:
+        category = item.get("category", "Uncategorized")
+        grouped.setdefault(category, []).append(item)
+
+    return {"items": items, "grouped": grouped}
+
+
+async def update_inventory_item(item_id: str, update_data: dict):
+    # Convert string ID to ObjectId
+    try:
+        oid = ObjectId(item_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid item ID")
+
+    # Perform update
+    result = await inventory_collection.update_one(
+        {"_id": oid},
+        {"$set": update_data}
+    )
+
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Item not found")
+
+    # Fetch updated document
+    updated = await inventory_collection.find_one({"_id": oid})
+    updated["_id"] = str(updated["_id"])  # stringify ObjectId
+
+    return {"success": True, "message": "Item updated successfully", "item": updated}

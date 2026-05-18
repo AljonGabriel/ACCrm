@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Inventory from "./pages/Inventory";
+import Employees from "./pages/Employees";
 import PrivateRoute from "./components/PrivateRoutes";
 
 function App() {
@@ -25,6 +26,14 @@ function App() {
             element={
               <PrivateRoute>
                 <Inventory />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/employees"
+            element={
+              <PrivateRoute>
+                <Employees />
               </PrivateRoute>
             }
           />
