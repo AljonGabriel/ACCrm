@@ -9,7 +9,7 @@ const Login = () => {
   useEffect(() => {
     if (isAuthenticated()) {
       // ✅ Already logged in → redirect to home
-      navigate("/home");
+      navigate("/");
     }
   }, [navigate]);
 
