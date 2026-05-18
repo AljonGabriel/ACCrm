@@ -1,4 +1,4 @@
-import GlobalModal from "./GlobalModal";
+import GlobalModal from "../GlobalModal";
 import InvUpdateItem from "./InvUpdateItem";
 import { useEffect, useState } from "react";
 import axios from "axios";

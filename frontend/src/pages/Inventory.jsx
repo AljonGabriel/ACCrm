@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
-import InvAddItemForm from "../components/InvAddItemForm";
+import InvAddItemForm from "../components/Inventory/InvAddItemForm";
 import GlobalModal from "../components/GlobalModal";
-import InvItemTables from "../components/InvItemTables";
+import InvItemTables from "../components/Inventory/InvItemTables";
 
 const Inventory = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

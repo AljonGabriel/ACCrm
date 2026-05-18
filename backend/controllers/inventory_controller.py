@@ -63,3 +63,17 @@ async def update_inventory_item(item_id: str, update_data: dict):
     updated["_id"] = str(updated["_id"])  # stringify ObjectId
 
     return {"success": True, "message": "Item updated successfully", "item": updated}
+
+
+async def delete_inventory_item(item_id: str):
+    try:
+        oid = ObjectId(item_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid item ID")
+
+    result = await inventory_collection.delete_one({"_id": oid})
+
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Item not found")
+
+    return {"success": True, "message": "Item deleted successfully"}

@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Inventory from "./pages/Inventory";
 import Employees from "./pages/Employees";
 import PrivateRoute from "./components/PrivateRoutes";
+import KB from "./pages/KB";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -18,6 +19,14 @@ function App() {
             element={
               <PrivateRoute>
                 <Home />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/KB"
+            element={
+              <PrivateRoute>
+                <KB />
               </PrivateRoute>
             }
           />

@@ -51,11 +51,14 @@ const Navbar = () => {
           <Link to="/inventory" className="hover:text-gray-200">
             Inventory
           </Link>
-          <Link to="/knowledge" className="hover:text-gray-200">
+          <Link to="/kb" className="hover:text-gray-200">
             KB
           </Link>
           <Link to="/employees" className="hover:text-gray-200">
             Employees
+          </Link>
+          <Link to="/stations" className="hover:text-gray-200">
+            Stations
           </Link>
         </div>
 

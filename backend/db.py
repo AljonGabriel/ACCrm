@@ -10,4 +10,5 @@ db = client["accrm"]
 # Collections
 users_collection = db["users"]          # for auth/login
 inventory_collection = db["inventory"]  # for inventory items
+employee_collection = db["employees"]  # for employee information
 
