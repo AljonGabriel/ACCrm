@@ -4,14 +4,14 @@ import DOMPurify from "dompurify";
 
 export default function EmpAddForm({ onAdded }) {
   const [formData, setFormData] = useState({
-    emp_id: "",
+    emp_id: "EMP-0026-00",
     name: "",
     email: "",
     position: "",
     contact: "",
-    department: "",
+    department: "PROD",
     client: "",
-    status: "",
+    status: "Active",
   });
 
   const handleChange = (e) => {
@@ -57,12 +57,7 @@ export default function EmpAddForm({ onAdded }) {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-4 p-6 border rounded shadow-md"
-    >
-      <h2 className="text-xl font-bold mb-4">Add Employee</h2>
-
+    <form onSubmit={handleSubmit}>
       {Object.keys(formData).map((field) => (
         <div key={field}>
           <label className="block text-sm font-medium text-gray-700 mb-1 capitalize">
@@ -80,7 +75,7 @@ export default function EmpAddForm({ onAdded }) {
 
       <button
         type="submit"
-        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow-md transition"
+        className="bg-green-600 hover:bg-green-700 text-white my-2 px-4 py-2 rounded shadow-md transition"
       >
         Save Employee
       </button>

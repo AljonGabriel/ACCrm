@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-export default function InvUpdateItem({ item, onUpdated }) {
+export default function InvUpdateItem({ item, onUpdated, employees }) {
   const [formData, setFormData] = useState({
     category: item.category,
     item_name: item.item_name,
@@ -41,14 +41,19 @@ export default function InvUpdateItem({ item, onUpdated }) {
           name="category"
           value={formData.category}
           onChange={handleChange}
-          className="w-full p-2 focus:outline-none border-b border-gray-300 focus:border-blue-500 rounded"
+          className="w-full p-2 border rounded"
         >
-          <option value="">... </option>
-          <option value="Headset">Headset</option>
+          <option value="" disabled>
+            ...
+          </option>
           <option value="Printer">Printer</option>
           <option value="Mouse">Mouse</option>
-          <option value="Keyboard">Keyboard</option>
           <option value="Monitor">Monitor</option>
+          <option value="Keyboard">Keyboard</option>
+          <option value="Headset">Headset</option>
+          <option value="Laptop">Laptop</option>
+          <option value="Desktop">Desktop</option>
+          <option value="Other">Other</option>
         </select>
       </div>
 
@@ -58,7 +63,7 @@ export default function InvUpdateItem({ item, onUpdated }) {
           name="item_name"
           value={formData.item_name}
           onChange={handleChange}
-          className="w-full p-2 focus:outline-none border-b border-gray-300 focus:border-blue-500 rounded"
+          className="w-full p-2 border rounded"
         />
       </div>
 
@@ -68,7 +73,7 @@ export default function InvUpdateItem({ item, onUpdated }) {
           name="serial_number"
           value={formData.serial_number}
           onChange={handleChange}
-          className="w-full p-2 focus:outline-none border-b border-gray-300 focus:border-blue-500 rounded"
+          className="w-full p-2 border  rounded"
         />
       </div>
 
@@ -80,23 +85,13 @@ export default function InvUpdateItem({ item, onUpdated }) {
           name="status"
           value={formData.status}
           onChange={handleChange}
-          className="w-full p-2 focus:outline-none border-b border-gray-300 focus:border-blue-500 rounded"
+          className="w-full p-2 border rounded"
         >
           <option value="">...</option>
           <option value="Working">Working</option>
           <option value="Defective">Defective</option>
           <option value="Missing">Missing</option>
         </select>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium">Date Added</label>
-        <input
-          name="date_added"
-          value={formData.date_added}
-          onChange={handleChange}
-          className="w-full p-2 focus:outline-none border-b border-gray-300 focus:border-blue-500 rounded"
-        />
       </div>
 
       <div>
@@ -108,18 +103,27 @@ export default function InvUpdateItem({ item, onUpdated }) {
           type="number"
           value={formData.stock}
           onChange={handleChange}
-          className="w-full p-2 focus:outline-none border-b border-gray-300 focus:border-blue-500"
+          className="w-full p-2 border rounded"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium">Endorsed</label>
-        <input
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Endorsed By
+        </label>
+        <select
           name="endorsed"
           value={formData.endorsed}
           onChange={handleChange}
-          className="w-full p-2 focus:outline-none border-b border-gray-300 focus:border-blue-500 rounded"
-        />
+          className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
+        >
+          <option value="Not Endorsed">Not Endorsed</option>
+          {employees.map((emp) => (
+            <option key={emp._id} value={emp.name}>
+              {emp.name} — {emp.position}
+            </option>
+          ))}
+        </select>
       </div>
 
       <button

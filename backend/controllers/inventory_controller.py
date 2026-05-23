@@ -3,6 +3,7 @@ from fastapi import HTTPException
 from db import inventory_collection   # assume you have a MongoDB collection like users_collection
 from models.inventory_model import InventoryItem
 from bson import ObjectId
+from datetime import datetime
 
 async def add_inventory_item(item: InventoryItem):
     # Check if serial number already exists
@@ -12,18 +13,21 @@ async def add_inventory_item(item: InventoryItem):
 
     # Insert into DB
     new_item = item.dict()
+
+    # ✅ Always set today's date automatically
+    new_item["date_added"] = datetime.today().strftime("%Y-%m-%d")
+
     result = await inventory_collection.insert_one(new_item)
 
     # Fetch inserted doc
     inserted = await inventory_collection.find_one({"_id": result.inserted_id})
-    inserted["_id"] = str(inserted["_id"])  # ✅ stringify ObjectId
+    inserted["_id"] = str(inserted["_id"])  # stringify ObjectId
 
     return {
         "success": True,
         "message": "Item added successfully",
         "item": inserted
     }
-
 
 # Controller function: handles DB logic
 async def list_inventory_items():

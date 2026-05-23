@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import InvAddItemForm from "../components/Inventory/InvAddItemForm";
 import GlobalModal from "../components/GlobalModal";
 import InvItemTables from "../components/Inventory/InvItemTables";
+import axios from "axios";
 
 const Inventory = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [employees, setEmployees] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/employee/list")
+      .then((res) => setEmployees(res.data.employees || []))
+      .catch((err) => console.error("Error fetching employees:", err));
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -24,10 +34,13 @@ const Inventory = () => {
           onClose={() => setIsModalOpen(false)}
           title="New Item"
         >
-          <InvAddItemForm onSuccess={() => setIsModalOpen(false)} />
+          <InvAddItemForm
+            employees={employees}
+            onSuccess={() => setIsModalOpen(false)}
+          />
         </GlobalModal>
 
-        <InvItemTables />
+        <InvItemTables employees={employees} />
       </div>
     </>
   );
