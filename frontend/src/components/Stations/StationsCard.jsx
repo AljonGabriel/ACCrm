@@ -1,30 +1,22 @@
-import React from "react";
-
-// Station Box Component
-function StationBox({ station }) {
+// StationCard.jsx
+export default function StationCard({ station, onClick }) {
   return (
     <div
-      className={`border rounded-lg p-4 text-center shadow-md ${
+      onClick={() => onClick(station)}
+      className={`w-50 h-40 border p-4 text-center shadow-md cursor-pointer ${
         station?.status === "Online" ? "border-green-500" : "border-red-500"
       }`}
     >
       {/* Hostname */}
       <h3 className="font-bold text-lg">
-        {station?.hostname || "Unknown Host"}
+        {station?.hostname || "Click to add hostname"}
       </h3>
 
-      {/* Production grouping */}
-      <p className="text-xs text-gray-500">
-        Prod: {station?.production || "N/A"}
-      </p>
-
       {/* Location */}
-      <p className="text-sm text-gray-600">
-        {station?.location || "No Location"}
-      </p>
+      <p className="text-sm text-gray-600">{station?.location}</p>
 
       {/* IP Address */}
-      <p className="text-xs text-gray-500">IP: {station?.ip || "No IP"}</p>
+      <p className="text-xs text-gray-500">{station?.ip || "No IP yet"}</p>
 
       {/* Status */}
       <p
@@ -34,37 +26,6 @@ function StationBox({ station }) {
       >
         {station?.status || "Unknown Status"}
       </p>
-    </div>
-  );
-}
-
-// Grid Component for Stations
-export default function StationsGrid({ stations }) {
-  // Separate Prod 1 and Prod 2
-  const prod1Stations = stations.filter((s) => s?.production === "Prod 1");
-  const prod2Stations = stations.filter((s) => s?.production === "Prod 2");
-
-  return (
-    <div className="space-y-10">
-      {/* Prod 1 */}
-      <div>
-        <h2 className="text-xl font-bold mb-4">Production 1 (27 Stations)</h2>
-        <div className="grid grid-cols-9 gap-4">
-          {prod1Stations.map((station) => (
-            <StationBox key={station?._id} station={station} />
-          ))}
-        </div>
-      </div>
-
-      {/* Prod 2 */}
-      <div>
-        <h2 className="text-xl font-bold mb-4">Production 2</h2>
-        <div className="grid grid-cols-9 gap-4">
-          {prod2Stations.map((station) => (
-            <StationBox key={station?._id} station={station} />
-          ))}
-        </div>
-      </div>
     </div>
   );
 }

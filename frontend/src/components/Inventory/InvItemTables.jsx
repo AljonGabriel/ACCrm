@@ -184,7 +184,9 @@ export default function InvItemTables({ employees, items, onSetItems }) {
       {defectiveItems.length > 0 && (
         <div className="overflow-x-auto max-w-full border border-gray-400 rounded-md shadow-sm p-4">
           <div className="flex items-center gap-2 mb-2">
-            <h3 className="text-lg font-semibold">Defective Items</h3>
+            <h3 className="text-lg font-semibold text-red-600">
+              Defective Items
+            </h3>
             <small className="text-gray-600">({defectiveItems.length})</small>
           </div>
           <table className={tableClass}>

@@ -7,7 +7,7 @@ from controllers.station_controllers import (
     delete_station_controller
 )
 
-router = APIRouter(prefix="/stations", tags=["Stations"])
+router = APIRouter()
 
 @router.post("/init")
 async def init_stations():

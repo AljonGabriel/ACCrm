@@ -10,13 +10,11 @@ async def init_stations_controller():
     # Left side: 6 front + 6 back
     for i in range(6):
         stations.append({"production": "Prod 1", "location": "Left Front", "hostname": None, "ip": None, "status": "Offline"})
-    for i in range(6):
-        stations.append({"production": "Prod 1", "location": "Left Back", "hostname": None, "ip": None, "status": "Offline"})
 
     # Right side: 6 front + 6 back
-    for i in range(6):
+    for i in range(7):
         stations.append({"production": "Prod 1", "location": "Right Front", "hostname": None, "ip": None, "status": "Offline"})
-    for i in range(6):
+    for i in range(7):
         stations.append({"production": "Prod 1", "location": "Right Back", "hostname": None, "ip": None, "status": "Offline"})
 
     # TL stations: 3 front
