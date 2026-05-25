@@ -1,7 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
-export default function InvUpdateItem({ item, onUpdated, employees }) {
+export default function InvUpdateItem({
+  item,
+  onSetItems,
+  employees,
+  onSuccess,
+}) {
   const [formData, setFormData] = useState({
     category: item.category,
     item_name: item.item_name,
@@ -24,10 +30,22 @@ export default function InvUpdateItem({ item, onUpdated, employees }) {
         formData,
       );
 
-      onUpdated(res.data.item); // callback to refresh parent table
+      toast.success(res.data.message);
+
+      // ✅ Update parent state
+      if (onSetItems) {
+        onSetItems((prev) =>
+          prev.map((i) => (i._id === res.data.item._id ? res.data.item : i)),
+        );
+      }
+
+      // ✅ Close modal
+      if (onSuccess) onSuccess();
     } catch (err) {
-      console.error("Update error:", err);
-      alert("Failed to update item");
+      // ✅ Reliable error handling
+      if (err.response && err.response.data && err.response.data.detail) {
+        toast.error(err.response.data.detail); // e.g. "Serial number already exists"
+      }
     }
   };
 
@@ -93,6 +111,22 @@ export default function InvUpdateItem({ item, onUpdated, employees }) {
           <option value="Missing">Missing</option>
         </select>
       </div>
+
+      {/* Show issue description only if Defective */}
+      {formData.status === "Defective" && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Defective Issue
+          </label>
+          <textarea
+            name="defective_issue"
+            value={formData.defective_issue || ""}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+            placeholder="Describe the issue..."
+          />
+        </div>
+      )}
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">

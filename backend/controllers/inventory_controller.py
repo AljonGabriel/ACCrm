@@ -53,6 +53,13 @@ async def update_inventory_item(item_id: str, update_data: dict):
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid item ID")
 
+    # If status is Defective, auto-populate defective_date
+    if update_data.get("status") == "Defective":
+        update_data["defective_date"] = datetime.today().strftime("%Y-%m-%d")
+        # defective_issue should come from frontend form
+        if "defective_issue" not in update_data:
+            raise HTTPException(status_code=400, detail="Defective issue description required")
+
     # Perform update
     result = await inventory_collection.update_one(
         {"_id": oid},
@@ -67,7 +74,6 @@ async def update_inventory_item(item_id: str, update_data: dict):
     updated["_id"] = str(updated["_id"])  # stringify ObjectId
 
     return {"success": True, "message": "Item updated successfully", "item": updated}
-
 
 async def delete_inventory_item(item_id: str):
     try:

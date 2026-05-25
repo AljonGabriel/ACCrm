@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
-export default function AddItemForm({ onAdded, employees }) {
+export default function AddItemForm({ onSetItems, employees, onSuccess }) {
   const [formData, setFormData] = useState({
     category: "",
     item_name: "",
@@ -24,8 +25,14 @@ export default function AddItemForm({ onAdded, employees }) {
         "http://localhost:8000/inventory/add",
         formData,
       );
-      alert(res.data.message);
-      if (onAdded) onAdded(res.data.item);
+      // ✅ Update parent’s items list immediately
+      if (onSetItems) {
+        onSetItems((prev) => [...prev, res.data.item]);
+      }
+
+      // ✅ Close modal after success
+      if (onSuccess) onSuccess();
+
       setFormData({
         category: "",
         item_name: "",
@@ -34,9 +41,15 @@ export default function AddItemForm({ onAdded, employees }) {
         stock: "",
         endorsed: "",
       });
+
+      toast.success("Item added successfully!");
     } catch (err) {
-      console.error("Error adding item:", err);
-      alert("Failed to add item");
+      // ✅ Reliable error handling
+      if (err.response && err.response.data && err.response.data.detail) {
+        toast.error(err.response.data.detail); // e.g. "Serial number already exists"
+      } else {
+        toast.error("Unexpected error occurred");
+      }
     }
   };
 
@@ -53,6 +66,9 @@ export default function AddItemForm({ onAdded, employees }) {
           className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
           required
         >
+          <option value="" disabled>
+            ...
+          </option>
           <option value="Headset">Headset</option>
           <option value="Printer">Printer</option>
           <option value="Mouse">Mouse</option>
@@ -95,6 +111,7 @@ export default function AddItemForm({ onAdded, employees }) {
           onChange={handleChange}
           className="w-full p-2 border rounded"
         >
+          <option value="">...</option>
           <option value="Working">Working</option>
           <option value="Defective">Defective</option>
           <option value="Missing">Missing</option>

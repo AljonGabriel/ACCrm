@@ -1,11 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Inventory from "./pages/Inventory";
 import Employees from "./pages/Employees";
 import PrivateRoute from "./components/PrivateRoutes";
 import KB from "./pages/KB";
-
+import Stations from "./pages/Stations";
 function App() {
   const token = localStorage.getItem("token");
 
@@ -46,8 +49,28 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+            path="/stations"
+            element={
+              <PrivateRoute>
+                <Stations />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
+
+      {/* ✅ Toast container for notifications */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="colored"
+      />
     </>
   );
 }

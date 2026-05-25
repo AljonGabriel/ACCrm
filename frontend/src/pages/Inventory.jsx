@@ -8,12 +8,20 @@ import axios from "axios";
 const Inventory = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [employees, setEmployees] = useState([]);
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
     axios
       .get("http://localhost:8000/employee/list")
       .then((res) => setEmployees(res.data.employees || []))
       .catch((err) => console.error("Error fetching employees:", err));
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/inventory/list")
+      .then((res) => setItems(res.data.items || []))
+      .catch((err) => console.error("Error fetching inventory:", err));
   }, []);
 
   return (
@@ -36,11 +44,16 @@ const Inventory = () => {
         >
           <InvAddItemForm
             employees={employees}
+            onSetItems={setItems}
             onSuccess={() => setIsModalOpen(false)}
           />
         </GlobalModal>
 
-        <InvItemTables employees={employees} />
+        <InvItemTables
+          employees={employees}
+          items={items}
+          onSetItems={setItems}
+        />
       </div>
     </>
   );

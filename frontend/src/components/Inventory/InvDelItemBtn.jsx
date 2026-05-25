@@ -1,6 +1,7 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
-export default function InvDelItemBtn({ itemId, onDeleted }) {
+export default function InvDelItemBtn({ itemId, onSetItems }) {
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this item?")) return;
 
@@ -8,13 +9,21 @@ export default function InvDelItemBtn({ itemId, onDeleted }) {
       const res = await axios.delete(
         `http://localhost:8000/inventory/delete/${itemId}`,
       );
-      alert(res.data.message);
 
-      // ✅ Notify parent to refresh table
-      if (onDeleted) onDeleted(itemId);
+      // ✅ Toast instead of alert
+      toast.success(res.data.message);
+
+      // ✅ Update parent state
+      if (onSetItems) {
+        onSetItems((prev) => prev.filter((i) => i._id !== itemId));
+      }
     } catch (err) {
       console.error("Delete error:", err);
-      alert("Failed to delete item");
+      if (err.response?.data?.detail) {
+        toast.error(err.response.data.detail);
+      } else {
+        toast.error("Failed to delete item");
+      }
     }
   };
 
