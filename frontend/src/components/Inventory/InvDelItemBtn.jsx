@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../../config/axios";
 import { toast } from "react-toastify";
 
 export default function InvDelItemBtn({ itemId, onSetItems }) {
@@ -6,9 +6,7 @@ export default function InvDelItemBtn({ itemId, onSetItems }) {
     if (!window.confirm("Are you sure you want to delete this item?")) return;
 
     try {
-      const res = await axios.delete(
-        `http://localhost:8000/inventory/delete/${itemId}`,
-      );
+      const res = await api.delete(`/inventory/delete/${itemId}`);
 
       // ✅ Toast instead of alert
       toast.success(res.data.message);

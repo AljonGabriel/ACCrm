@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../../config/axios";
 import { toast } from "react-toastify";
 
 export default function InvUpdateItem({
@@ -25,10 +25,7 @@ export default function InvUpdateItem({
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put(
-        `http://localhost:8000/inventory/update/${item._id}`,
-        formData,
-      );
+      const res = await api.put(`/inventory/update/${item._id}`, formData);
 
       toast.success(res.data.message);
 

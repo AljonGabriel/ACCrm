@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify"; // ✅ sanitize inputs
+import api from "../config/axios"; // ✅ use centralized API config
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -22,9 +23,11 @@ const LoginForm = () => {
       return;
     }
 
+    console.log(api);
+
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/auth/login",
+      const response = await api.post(
+        "/auth/login",
         new URLSearchParams({ email: cleanEmail, password: cleanPassword }),
         { headers: { "Content-Type": "application/x-www-form-urlencoded" } },
       );

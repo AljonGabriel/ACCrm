@@ -1,15 +1,13 @@
 // StationsGrid.jsx
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../config/axios";
 import StationCard from "./StationsCard";
 
 export default function StationsGrid() {
   const [stations, setStations] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/station")
-      .then((res) => setStations(res.data));
+    api.get("/station").then((res) => setStations(res.data));
   }, []);
 
   const handleClick = (station) => {

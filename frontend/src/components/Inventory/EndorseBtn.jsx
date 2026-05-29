@@ -1,23 +1,22 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../config/axios";
 
 export default function EndorseButton({ item, onEndorsed }) {
   const [employees, setEmployees] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/employee/list")
+    api
+      .get("/employee/list")
       .then((res) => setEmployees(res.data.employees || []))
       .catch((err) => console.error("Error fetching employees:", err));
   }, []);
 
   const handleEndorse = async (empName) => {
     try {
-      const res = await axios.put(
-        `http://localhost:8000/inventory/update/${item._id}`,
-        { endorsed: empName },
-      );
+      const res = await api.put(`/inventory/update/${item._id}`, {
+        endorsed: empName,
+      });
       if (onEndorsed) onEndorsed(res.data.item);
       setShowDropdown(false);
     } catch (err) {

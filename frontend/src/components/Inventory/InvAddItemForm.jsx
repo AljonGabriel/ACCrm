@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../config/axios";
 import { toast } from "react-toastify";
 
 export default function AddItemForm({ onSetItems, employees, onSuccess }) {
@@ -21,10 +21,7 @@ export default function AddItemForm({ onSetItems, employees, onSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        "http://localhost:8000/inventory/add",
-        formData,
-      );
+      const res = await api.post("/inventory/add", formData);
       // ✅ Update parent’s items list immediately
       if (onSetItems) {
         onSetItems((prev) => [...prev, res.data.item]);

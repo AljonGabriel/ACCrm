@@ -1,6 +1,7 @@
 import { useState } from "react";
-import axios from "axios";
+
 import DOMPurify from "dompurify";
+import api from "../../config/axios";
 
 export default function EmpAddForm({ onAdded }) {
   const [formData, setFormData] = useState({
@@ -31,10 +32,7 @@ export default function EmpAddForm({ onAdded }) {
         ]),
       );
 
-      const res = await axios.post(
-        "http://localhost:8000/employee/add",
-        sanitizedData,
-      );
+      const res = await api.post("/employee/add", sanitizedData);
       alert(res.data.message);
 
       if (onAdded) onAdded(res.data.employee);

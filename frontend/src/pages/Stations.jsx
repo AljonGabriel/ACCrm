@@ -3,13 +3,13 @@ import StationCard from "../components/Stations/StationsCard";
 import Navbar from "../components/Navbar";
 import StationsGrid from "../components/Stations/StationGrid";
 import StationsLayout from "../components/Stations/StationsLayout";
-import axios from "axios";
+import api from "../config/axios";
 const Stations = () => {
   const [stations, setStations] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/station")
+    api
+      .get("/station")
       .then((res) => setStations(res.data))
       .catch((err) => console.error("Error fetching stations:", err));
   }, []);

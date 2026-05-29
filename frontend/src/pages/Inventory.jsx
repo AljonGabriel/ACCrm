@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import InvAddItemForm from "../components/Inventory/InvAddItemForm";
 import GlobalModal from "../components/GlobalModal";
 import InvItemTables from "../components/Inventory/InvItemTables";
-import axios from "axios";
+import api from "../config/axios";
 
 const Inventory = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -11,15 +11,15 @@ const Inventory = () => {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/employee/list")
+    api
+      .get("/employee/list")
       .then((res) => setEmployees(res.data.employees || []))
       .catch((err) => console.error("Error fetching employees:", err));
   }, []);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/inventory/list")
+    api
+      .get("/inventory/list")
       .then((res) => setItems(res.data.items || []))
       .catch((err) => console.error("Error fetching inventory:", err));
   }, []);

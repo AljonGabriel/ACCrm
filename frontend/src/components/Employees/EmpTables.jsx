@@ -1,14 +1,14 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../config/axios";
 
 const EmpTables = () => {
   const [employees, setEmployees] = useState([]);
   const [selectedemployee, setSelectedEmployee] = useState(null);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/employee/list")
+    api
+      .get("/employee/list")
       .then((res) => setEmployees(res.data.employees || []))
       .catch((err) => console.error("Error fetching employees:", err));
   }, []);

@@ -1,6 +1,6 @@
 // StationAddInfoFrm.jsx
 import { useState } from "react";
-import axios from "axios";
+import api from "../../config/axios";
 
 export default function StationAddInfoFrm({ station, onClose }) {
   const [hostname, setHostname] = useState(station?.hostname || "");
@@ -12,8 +12,8 @@ export default function StationAddInfoFrm({ station, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(
-        `http://localhost:8000/station/update/${station?._id}`, // ✅ matches your router
+      const response = await api.put(
+        `/station/update/${station?._id}`, // ✅ matches your router
         {
           hostname,
           ip,
