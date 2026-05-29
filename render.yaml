@@ -3,20 +3,18 @@ services:
   - type: web
     name: station-backend
     env: python
+    plan: free
     rootDir: backend
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
-    envVars:
-      - key: PORT
-        value: 8000
 
-  # React frontend
-  - type: web
+  # React frontend (static site)
+  - type: static_site
     name: station-frontend
-    env: node
+    plan: free
     rootDir: frontend
     buildCommand: npm install && npm run build
-    startCommand: npm run preview -- --port $PORT
+    publishDir: dist
     envVars:
       - key: VITE_API_BASE
         value: https://station-backend.onrender.com
