@@ -6,12 +6,18 @@ from routers import auth_routes, inventory_routes, station_routes
 
 app = FastAPI()
 
+# Allow your frontend domain
+origins = [
+    "https://station-frontend-194g.onrender.com",  # deployed frontend
+    "http://localhost:5173",                       # local Vite dev server
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # or restrict to your frontend URL
+    allow_origins=origins,        # list of allowed origins
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],          # allow all HTTP methods
+    allow_headers=["*"],          # allow all headers
 )
 
 
