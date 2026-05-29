@@ -11,9 +11,6 @@ const API_BASE = isLocal
 
 const api = axios.create({
   baseURL: API_BASE,
-  headers: {
-    "Content-Type": "application/x-www-form-urlencoded",
-  },
 });
 
 export default api;
