@@ -8,23 +8,20 @@ export default function StationCard({ station, onClick }) {
       }`}
     >
       {/* Hostname */}
-      <h3 className="font-bold text-lg">
-        {station?.hostname || "Click to add hostname"}
-      </h3>
+      <p className="text-sm">{station?.hostname || "Click to add hostname"}</p>
 
-      {/* Location */}
-      <p className="text-sm text-gray-600">{station?.location}</p>
+      {/* Stationed */}
+      <p className="text-sm">{station?.stationed || "Stationed"}</p>
 
       {/* IP Address */}
       <p className="text-xs text-gray-500">{station?.ip || "No IP yet"}</p>
-
-      {/* Status */}
-      <p
-        className={`text-xs font-semibold mt-2 ${
-          station?.status === "Online" ? "text-green-600" : "text-red-600"
-        }`}
-      >
-        {station?.status || "Unknown Status"}
+      {/* MAC Address */}
+      <p className="text-xs text-gray-500">
+        {station?.macaddress || "No MAC address yet"}
+      </p>
+      {/* Anydesk */}
+      <p className="text-sm text-gray-600">
+        {station?.anydesk || "No Anydesk ID yet"}
       </p>
     </div>
   );

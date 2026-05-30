@@ -1,6 +1,7 @@
 // StationAddInfoFrm.jsx
 import { useState } from "react";
 import api from "../../config/axios";
+import DOMPurify from "dompurify";
 
 export default function StationAddInfoFrm({ station, onClose }) {
   const [hostname, setHostname] = useState(station?.hostname || "");
@@ -8,18 +9,25 @@ export default function StationAddInfoFrm({ station, onClose }) {
   const [status, setStatus] = useState(station?.status || "Offline");
   const [production, setProduction] = useState(station?.production || "Prod 1");
   const [location, setLocation] = useState(station?.location || "");
+  const [anydeskId, setAnydeskId] = useState(station?.anydesk_id || "");
+  const [macAddress, setMacAddress] = useState(station?.mac_address || "");
+  const [stationed, setStationed] = useState(station?.stationed || "");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const response = await api.put(
         `/station/update/${station?._id}`, // ✅ matches your router
         {
-          hostname,
-          ip,
-          status,
-          production, // required
-          location, // required
+          hostname: DOMPurify.sanitize(hostname.trim()),
+          ip: DOMPurify.sanitize(ip.trim()),
+          status: DOMPurify.sanitize(status.trim()),
+          production: DOMPurify.sanitize(production.trim()), // required
+          location: DOMPurify.sanitize(location.trim()), // required
+          anydesk_id: DOMPurify.sanitize(anydeskId.trim()),
+          mac_address: DOMPurify.sanitize(macAddress.trim()),
+          stationed: DOMPurify.sanitize(stationed.trim()),
         },
       );
       alert(response.data.message || "Station updated successfully!");
@@ -34,6 +42,7 @@ export default function StationAddInfoFrm({ station, onClose }) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <h3 className="font-semibold text-lg">Edit Station Info</h3>
 
+      {/* Hostname */}
       <div>
         <label className="block text-sm font-medium">Hostname</label>
         <input
@@ -44,6 +53,7 @@ export default function StationAddInfoFrm({ station, onClose }) {
         />
       </div>
 
+      {/* IP Address */}
       <div>
         <label className="block text-sm font-medium">IP Address</label>
         <input
@@ -54,6 +64,7 @@ export default function StationAddInfoFrm({ station, onClose }) {
         />
       </div>
 
+      {/* Status */}
       <div>
         <label className="block text-sm font-medium">Status</label>
         <select
@@ -66,6 +77,7 @@ export default function StationAddInfoFrm({ station, onClose }) {
         </select>
       </div>
 
+      {/* Production */}
       <div>
         <label className="block text-sm font-medium">Production</label>
         <select
@@ -78,6 +90,7 @@ export default function StationAddInfoFrm({ station, onClose }) {
         </select>
       </div>
 
+      {/* Location */}
       <div>
         <label className="block text-sm font-medium">Location</label>
         <input
@@ -88,6 +101,40 @@ export default function StationAddInfoFrm({ station, onClose }) {
         />
       </div>
 
+      {/* AnyDesk ID */}
+      <div>
+        <label className="block text-sm font-medium">AnyDesk ID</label>
+        <input
+          type="text"
+          value={anydeskId}
+          onChange={(e) => setAnydeskId(e.target.value)}
+          className="w-full border p-2 rounded"
+        />
+      </div>
+
+      {/* MAC Address */}
+      <div>
+        <label className="block text-sm font-medium">MAC Address</label>
+        <input
+          type="text"
+          value={macAddress}
+          onChange={(e) => setMacAddress(e.target.value)}
+          className="w-full border p-2 rounded"
+        />
+      </div>
+
+      {/* Stationed */}
+      <div>
+        <label className="block text-sm font-medium">Stationed</label>
+        <input
+          type="text"
+          value={stationed}
+          onChange={(e) => setStationed(e.target.value)}
+          className="w-full border p-2 rounded"
+        />
+      </div>
+
+      {/* Buttons */}
       <div className="flex justify-end gap-2">
         <button
           type="button"
