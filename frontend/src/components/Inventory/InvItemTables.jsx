@@ -1,36 +1,51 @@
 import { useEffect, useState } from "react";
-
 import InvDelItemBtn from "./InvDelItemBtn";
 import GlobalModal from "../GlobalModal";
 import InvUpdateItem from "./InvUpdateItem";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export default function InvItemTables({ employees, items, onSetItems }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (items && items.length > 0) {
+      setLoading(false);
+    }
+  }, [items]);
 
   // Group items by category, excluding defective
   const groupedItems = items.reduce((acc, item) => {
-    if (item.status === "Defective") {
-      return acc; // ✅ skip defective items
-    }
+    if (item.status === "Defective") return acc;
     const category = item.category || "Uncategorized";
     if (!acc[category]) acc[category] = [];
     acc[category].push(item);
     return acc;
   }, {});
 
-  // Filter defective items
   const defectiveItems = items.filter((item) => item.status === "Defective");
 
-  // ✅ Shared table style
   const tableClass =
     "w-full border border-gray-400 rounded-md shadow-sm text-sm";
   const cellClass = "px-2 py-1 border text-center";
 
+  // Skeleton row generator
+  const SkeletonRow = ({ cols }) => (
+    <tr>
+      {Array.from({ length: cols }).map((_, idx) => (
+        <td key={idx} className={cellClass}>
+          <Skeleton height={20} />
+        </td>
+      ))}
+    </tr>
+  );
+
   return (
     <div className="py-6 space-y-8 overflow-x-auto">
-      {/* ✅ General table (searchable, newest first) */}
+      {/* ✅ General table */}
       <div className="overflow-x-auto max-w-full border border-gray-400 rounded-md shadow-sm p-4">
         <div className="flex items-center gap-2 mb-2">
           <h3 className="text-lg font-semibold">All Items</h3>
@@ -44,8 +59,10 @@ export default function InvItemTables({ employees, items, onSetItems }) {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
+            disabled={loading}
           />
         </div>
+
         <table className={tableClass}>
           <thead className="bg-gray-100">
             <tr>
@@ -60,62 +77,62 @@ export default function InvItemTables({ employees, items, onSetItems }) {
             </tr>
           </thead>
           <tbody>
-            {items
-              .filter(
-                (item) =>
-                  item.item_name
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
-                  item.serial_number
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
-                  item.category
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
-                  item.status
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
-                  item.endorsed
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase()),
-              )
-              .sort((a, b) => new Date(b.date_added) - new Date(a.date_added))
-              .map((item) => (
-                <tr key={item._id} className="hover:bg-gray-50">
-                  <td className={cellClass}>{item.category}</td>
-                  <td className={cellClass}>{item.item_name}</td>
-                  <td className={cellClass}>{item.serial_number}</td>
-                  <td className={cellClass}>{item.status}</td>
-                  <td className={cellClass}>{item.stock}</td>
-                  <td className={cellClass}>{item.date_added}</td>
-                  <td className={cellClass}>
-                    <b>{item.endorsed || "Not Endorsed"}</b>
-                  </td>
-                  <td className={cellClass}>
-                    {item.status === "Defective" ? (
-                      <small className="text-red-600 font-semibold">
-                        Not Applicable
-                      </small>
-                    ) : (
-                      <div className="flex gap-1">
-                        <button
-                          onClick={() => {
-                            setSelectedItem(item);
-                            setIsModalOpen(true);
-                          }}
-                          className="bg-yellow-600 hover:bg-yellow-700 text-white text-xs px-2 py-1 rounded shadow-sm transition"
-                        >
-                          Update
-                        </button>
-                        <InvDelItemBtn
-                          itemId={item._id}
-                          onSetItems={onSetItems} // pass setter directly
-                        />
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              ))}
+            {loading
+              ? Array.from({ length: 5 }).map((_, idx) => (
+                  <SkeletonRow key={idx} cols={8} />
+                ))
+              : items
+                  .filter(
+                    (item) =>
+                      item.item_name
+                        .toLowerCase()
+                        .includes(searchTerm.toLowerCase()) ||
+                      item.serial_number
+                        .toLowerCase()
+                        .includes(searchTerm.toLowerCase()) ||
+                      item.category
+                        .toLowerCase()
+                        .includes(searchTerm.toLowerCase()) ||
+                      item.status
+                        .toLowerCase()
+                        .includes(searchTerm.toLowerCase()) ||
+                      item.endorsed
+                        .toLowerCase()
+                        .includes(searchTerm.toLowerCase()),
+                  )
+                  .sort(
+                    (a, b) => new Date(b.date_added) - new Date(a.date_added),
+                  )
+                  .map((item) => (
+                    <tr key={item._id} className="hover:bg-gray-50">
+                      <td className={cellClass}>{item.category}</td>
+                      <td className={cellClass}>{item.item_name}</td>
+                      <td className={cellClass}>{item.serial_number}</td>
+                      <td className={cellClass}>{item.status}</td>
+                      <td className={cellClass}>{item.stock}</td>
+                      <td className={cellClass}>{item.date_added}</td>
+                      <td className={cellClass}>
+                        <b>{item.endorsed || "Not Endorsed"}</b>
+                      </td>
+                      <td className={cellClass}>
+                        <div className="flex gap-1">
+                          <button
+                            onClick={() => {
+                              setSelectedItem(item);
+                              setIsModalOpen(true);
+                            }}
+                            className="bg-yellow-600 hover:bg-yellow-700 text-white text-xs px-2 py-1 rounded shadow-sm transition"
+                          >
+                            Update
+                          </button>
+                          <InvDelItemBtn
+                            itemId={item._id}
+                            onSetItems={onSetItems}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
           </tbody>
         </table>
       </div>
@@ -146,41 +163,44 @@ export default function InvItemTables({ employees, items, onSetItems }) {
               </tr>
             </thead>
             <tbody>
-              {groupedItems[category].map((item) => (
-                <tr key={item._id} className="hover:bg-gray-50">
-                  <td className={cellClass}>{item.item_name}</td>
-                  <td className={cellClass}>{item.serial_number}</td>
-                  <td className={cellClass}>{item.status}</td>
-                  <td className={cellClass}>{item.stock}</td>
-                  <td className={cellClass}>{item.date_added}</td>
-                  <td className={cellClass}>
-                    <b>{item.endorsed || "Not Endorsed"}</b>
-                  </td>
-                  <td className={cellClass}>
-                    <div className="flex gap-1">
-                      <button
-                        onClick={() => {
-                          setSelectedItem(item);
-                          setIsModalOpen(true);
-                        }}
-                        className="bg-yellow-600 hover:bg-yellow-700 text-white text-xs px-2 py-1 rounded shadow-sm transition"
-                      >
-                        Update
-                      </button>
-                      <InvDelItemBtn
-                        itemId={item._id}
-                        onSetItems={onSetItems} // pass setter directly
-                      />
-                    </div>
-                  </td>
-                </tr>
-              ))}
+              {loading
+                ? Array.from({ length: 3 }).map((_, idx) => (
+                    <SkeletonRow key={idx} cols={7} />
+                  ))
+                : groupedItems[category].map((item) => (
+                    <tr key={item._id} className="hover:bg-gray-50">
+                      <td className={cellClass}>{item.item_name}</td>
+                      <td className={cellClass}>{item.serial_number}</td>
+                      <td className={cellClass}>{item.status}</td>
+                      <td className={cellClass}>{item.stock}</td>
+                      <td className={cellClass}>{item.date_added}</td>
+                      <td className={cellClass}>
+                        <b>{item.endorsed || "Not Endorsed"}</b>
+                      </td>
+                      <td className={cellClass}>
+                        <div className="flex gap-1">
+                          <button
+                            onClick={() => {
+                              setSelectedItem(item);
+                              setIsModalOpen(true);
+                            }}
+                            className="bg-yellow-600 hover:bg-yellow-700 text-white text-xs px-2 py-1 rounded shadow-sm transition"
+                          >
+                            Update
+                          </button>
+                          <InvDelItemBtn
+                            itemId={item._id}
+                            onSetItems={onSetItems}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
             </tbody>
           </table>
         </div>
       ))}
 
-      {/* ✅ Defective Items table */}
       {defectiveItems.length > 0 && (
         <div className="overflow-x-auto max-w-full border border-gray-400 rounded-md shadow-sm p-4">
           <div className="flex items-center gap-2 mb-2">
@@ -200,17 +220,25 @@ export default function InvItemTables({ employees, items, onSetItems }) {
               </tr>
             </thead>
             <tbody>
-              {defectiveItems.map((item) => (
-                <tr key={item._id} className="hover:bg-gray-50">
-                  <td className={cellClass}>{item.item_name}</td>
-                  <td className={cellClass}>{item.serial_number}</td>
-                  <td className={cellClass}>{item.defective_date || "—"}</td>
-                  <td className={cellClass}>{item.defective_issue || "—"}</td>
-                  <td className={cellClass}>
-                    <b>{item.endorsed || "Not Endorsed"}</b>
-                  </td>
-                </tr>
-              ))}
+              {loading
+                ? Array.from({ length: 3 }).map((_, idx) => (
+                    <SkeletonRow key={idx} cols={5} />
+                  ))
+                : defectiveItems.map((item) => (
+                    <tr key={item._id} className="hover:bg-gray-50">
+                      <td className={cellClass}>{item.item_name}</td>
+                      <td className={cellClass}>{item.serial_number}</td>
+                      <td className={cellClass}>
+                        {item.defective_date || "—"}
+                      </td>
+                      <td className={cellClass}>
+                        {item.defective_issue || "—"}
+                      </td>
+                      <td className={cellClass}>
+                        <b>{item.endorsed || "Not Endorsed"}</b>
+                      </td>
+                    </tr>
+                  ))}
             </tbody>
           </table>
         </div>
@@ -226,8 +254,8 @@ export default function InvItemTables({ employees, items, onSetItems }) {
           <InvUpdateItem
             item={selectedItem}
             employees={employees}
-            onSetItems={onSetItems} // pass setter
-            onSuccess={() => setIsModalOpen(false)} // close modal
+            onSetItems={onSetItems}
+            onSuccess={() => setIsModalOpen(false)}
           />
         )}
       </GlobalModal>

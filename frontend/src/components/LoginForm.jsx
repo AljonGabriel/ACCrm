@@ -1,29 +1,29 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import DOMPurify from "dompurify"; // ✅ sanitize inputs
-import api from "../config/axios"; // ✅ use centralized API config
+import DOMPurify from "dompurify";
+import api from "../config/axios";
+import { TailSpin } from "react-loader-spinner"; // ✅ spinner package
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // ✅ Sanitize inputs
     const cleanEmail = DOMPurify.sanitize(email.trim());
     const cleanPassword = DOMPurify.sanitize(password.trim());
 
-    // ✅ Basic validation before sending
     if (!cleanEmail || !cleanPassword) {
       setMessage("Email and password are required");
       return;
     }
 
-    console.log(api);
+    setLoading(true);
+    setMessage("");
 
     try {
       const response = await api.post(
@@ -33,25 +33,21 @@ const LoginForm = () => {
       );
 
       if (response.data.success && response.data.token) {
-        // ✅ Save token securely
         localStorage.setItem("token", response.data.token);
-
-        // ✅ Clear sensitive fields
         setEmail("");
         setPassword("");
-
-        // ✅ Redirect to Home
         navigate("/home");
       } else {
         setMessage(response.data.message || "Invalid credentials");
       }
     } catch (error) {
-      // ✅ More descriptive error handling
       if (error.response) {
         setMessage(error.response.data?.detail || "Login failed");
       } else {
         setMessage("Unable to connect to server");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -65,6 +61,7 @@ const LoginForm = () => {
           required
           onChange={(e) => setEmail(e.target.value)}
           className="w-full border px-2 py-1 rounded focus:ring-2 focus:ring-blue-500"
+          disabled={loading}
         />
       </div>
       <div>
@@ -77,13 +74,26 @@ const LoginForm = () => {
           required
           onChange={(e) => setPassword(e.target.value)}
           className="w-full border px-2 py-1 rounded focus:ring-2 focus:ring-blue-500"
+          disabled={loading}
         />
       </div>
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+        disabled={loading}
+        className={`w-full flex items-center justify-center px-4 py-2 rounded transition ${
+          loading
+            ? "bg-blue-200 text-blue-700 cursor-not-allowed"
+            : "bg-blue-600 text-white hover:bg-blue-700"
+        }`}
       >
-        Login
+        {loading ? (
+          <>
+            <TailSpin height={20} width={20} color="blue" ariaLabel="loading" />
+            <span className="ml-2">Logging in...</span>
+          </>
+        ) : (
+          "Login"
+        )}
       </button>
       {message && <p className="mt-2 text-sm text-red-600">{message}</p>}
     </form>
