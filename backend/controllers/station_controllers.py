@@ -3,30 +3,59 @@ from bson import ObjectId
 from models.station_model import Station
 from db import stations_collection
 
-# Seed 27 stations for Prod 1
+# Seed stations for Prod 1 and Prod 2, skipping duplicates
 async def init_stations_controller():
-    stations = []   
+    stations_to_insert = []
 
-    # Left side: 6 front + 6 back
+    async def add_station_if_not_exists(production, location, index):
+        # Check by production + location + index to avoid duplicates
+        existing = await stations_collection.find_one({
+            "production": production,
+            "location": location,
+            "index": index
+        })
+        if not existing:
+            stations_to_insert.append({
+                "production": production,
+                "location": location,
+                "index": index,
+                "hostname": None,
+                "ip": None,
+                "status": "Offline"
+            })
+
+    # ---------------- Prod 1 ----------------
     for i in range(6):
-        stations.append({"production": "Prod 1", "location": "Left Front", "hostname": None, "ip": None, "status": "Offline"})
-
-    # Right side: 6 front + 6 back
+        await add_station_if_not_exists("Prod 1", "Left Front", i)
+    for i in range(6):
+        await add_station_if_not_exists("Prod 1", "Left Back", i)
     for i in range(7):
-        stations.append({"production": "Prod 1", "location": "Right Front", "hostname": None, "ip": None, "status": "Offline"})
+        await add_station_if_not_exists("Prod 1", "Right Front", i)
     for i in range(7):
-        stations.append({"production": "Prod 1", "location": "Right Back", "hostname": None, "ip": None, "status": "Offline"})
-
-    # TL stations: 3 front
+        await add_station_if_not_exists("Prod 1", "Right Back", i)
     for i in range(3):
-        stations.append({"production": "Prod 1", "location": "TL Front", "hostname": None, "ip": None, "status": "Offline"})
-
-    # Back-to-back: 4
+        await add_station_if_not_exists("Prod 1", "TL Front", i)
     for i in range(4):
-        stations.append({"production": "Prod 1", "location": "Back-to-Back", "hostname": None, "ip": None, "status": "Offline"})
+        await add_station_if_not_exists("Prod 1", "Back-to-Back", i)
 
-    result = await stations_collection.insert_many(stations)
-    return {"success": True, "message": f"{len(result.inserted_ids)} stations inserted"}
+    # ---------------- Prod 2 ----------------
+    # Front: 4 rows × 4 stations = 16
+    for row in range(4):
+        for col in range(4):
+            idx = row * 4 + col
+            await add_station_if_not_exists("Prod 2", "Front", idx)
+
+    # Back: 1 row × 2 stations = 2
+    for i in range(2):
+        await add_station_if_not_exists("Prod 2", "Back", i)
+
+    # Insert only new stations
+    if stations_to_insert:
+        result = await stations_collection.insert_many(stations_to_insert)
+        return {"success": True, "message": f"{len(result.inserted_ids)} new stations inserted"}
+    else:
+        return {"success": True, "message": "No new stations inserted, all already exist"}
+
 
 # Get all stations
 async def get_stations_controller():

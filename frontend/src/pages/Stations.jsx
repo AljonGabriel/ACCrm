@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import StationCard from "../components/Stations/StationsCard";
 import Navbar from "../components/Navbar";
 import StationsGrid from "../components/Stations/StationGrid";
-import StationsLayout from "../components/Stations/StationsLayout";
+import Prd1Layout from "../components/Stations/Prd1Layout";
+import Prd2Layout from "../components/Stations/Prd2Layout";
 import api from "../config/axios";
 const Stations = () => {
   const [stations, setStations] = useState([]);
@@ -28,7 +29,8 @@ const Stations = () => {
   return (
     <>
       <Navbar />
-      <StationsLayout stations={stations} employees={employees} />
+      <Prd1Layout stations={stations} employees={employees} />
+      <Prd2Layout stations={stations} employees={employees} />
     </>
   );
 };

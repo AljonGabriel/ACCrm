@@ -17,80 +17,71 @@ export default function StationsLayout({ stations, employees }) {
 
   console.log("StationsLayout received stations:", selectedStation);
   return (
-    <div className="m-auto max-w-6xl p-6 border border-gray-400 rounded-md shadow-sm space-y-8">
-      {/* TL Front */}
-      <div className="mx-auto max-w-2xl">
-        <h3 className="font-semibold text-center">TL Front</h3>
-        <div className="flex justify-center">
-          <div className="grid grid-cols-3 gap-0">
-            {groupByLocation("TL Front").map((station) => (
-              <StationCard
-                key={station?._id}
-                station={station}
-                onClick={handleCardClick}
-              />
-            ))}
-          </div>
+    <div className="mx-auto max-w-6xl p-6">
+      <h3 className="text-2xl font-bold mb-6 text-center">Prod 1</h3>
+
+      {/* TL Front - flush, centered */}
+      <section className="flex justify-center mb-4">
+        <div className="grid grid-cols-3 ">
+          {groupByLocation("TL Front").map((station) => (
+            <StationCard
+              key={station?._id}
+              station={station}
+              onEdit={handleCardClick}
+            />
+          ))}
         </div>
-      </div>
+      </section>
 
       {/* Left + Right beside each other */}
-      <div className="flex justify-between">
-        {/* Left Side (Front only) */}
-        <div className="">
-          <h3 className="font-semibold">Left Side</h3>
-          <div className="flex flex-col gap-0">
+      <section className="flex justify-between mb-6">
+        {/* Left Side */}
+        <div className="flex-1">
+          <div className="flex flex-col">
             {groupByLocation("Left Front").map((station) => (
               <StationCard
                 key={station?._id}
                 station={station}
-                onClick={handleCardClick}
+                onEdit={handleCardClick}
               />
             ))}
           </div>
         </div>
 
-        {/* Right Side (Front + Back paired) */}
-        <div className="">
-          <h3 className="font-semibold text-right">Right Side</h3>
-          <div className="flex flex-col gap-0 items-end">
+        {/* Right Side */}
+        <div className="flex-1">
+          <div className="flex flex-col items-end">
             {groupByLocation("Right Front").map((frontStation, idx) => {
               const backStation = groupByLocation("Right Back")[idx];
               return (
-                <div key={frontStation?._id} className="flex gap-0">
+                <div key={frontStation?._id} className="flex">
                   {backStation && (
                     <StationCard
                       key={backStation?._id}
                       station={backStation}
-                      onClick={handleCardClick}
+                      onEdit={handleCardClick}
                     />
                   )}
-                  <StationCard
-                    station={frontStation}
-                    onClick={handleCardClick}
-                  />
+                  <StationCard station={frontStation} onEdi={handleCardClick} />
                 </div>
               );
             })}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Back-to-Back aligned under Left group, but wider */}
-      <div>
-        <h3 className="font-semibold">Back-to-Back</h3>
-        <div className="flex">
-          <div className="grid grid-cols-2 gap-0">
-            {groupByLocation("Back-to-Back").map((station) => (
-              <StationCard
-                key={station?._id}
-                station={station}
-                onClick={handleCardClick}
-              />
-            ))}
-          </div>
+      {/* Back-to-Back */}
+      <section className="flex justify-start mt-4">
+        <div className="grid grid-cols-2">
+          {groupByLocation("Back-to-Back").map((station) => (
+            <StationCard
+              key={station?._id}
+              station={station}
+              onEdit={handleCardClick}
+            />
+          ))}
         </div>
-      </div>
+      </section>
 
       {/* Global Modal */}
       <GlobalModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
