@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify";
 import api from "../../config/axios";
 import { TailSpin } from "react-loader-spinner"; // ✅ spinner package
+import { FaUserCircle } from "react-icons/fa"; // ✅ user icon
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -52,20 +53,33 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 bg-gray-50 p-6 rounded-lg shadow-md"
+    >
+      {/* Circle user icon */}
+      <div className="flex justify-center mb-4">
+        <FaUserCircle className="text-blue-600 text-7xl drop-shadow-md" />
+      </div>
+
+      {/* Email field */}
       <div>
-        <label className="block text-sm font-medium text-gray-600">Email</label>
+        <label className="block text-sm font-semibold text-gray-700 mb-1">
+          Email
+        </label>
         <input
           type="email"
           value={email}
           required
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full border px-2 py-1 rounded focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:bg-gray-200"
           disabled={loading}
         />
       </div>
+
+      {/* Password field */}
       <div>
-        <label className="block text-sm font-medium text-gray-600">
+        <label className="block text-sm font-semibold text-gray-700 mb-1">
           Password
         </label>
         <input
@@ -73,14 +87,16 @@ const LoginForm = () => {
           value={password}
           required
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full border px-2 py-1 rounded focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:bg-gray-200"
           disabled={loading}
         />
       </div>
+
+      {/* Submit button */}
       <button
         type="submit"
         disabled={loading}
-        className={`w-full flex items-center justify-center px-4 py-2 rounded transition ${
+        className={`w-full flex items-center justify-center px-4 py-2 rounded-lg font-semibold transition ${
           loading
             ? "bg-blue-200 text-blue-700 cursor-not-allowed"
             : "bg-blue-600 text-white hover:bg-blue-700"
@@ -95,7 +111,13 @@ const LoginForm = () => {
           "Login"
         )}
       </button>
-      {message && <p className="mt-2 text-sm text-red-600">{message}</p>}
+
+      {/* Error message */}
+      {message && (
+        <p className="mt-2 text-sm text-red-600 text-center">
+          {DOMPurify.sanitize(message)}
+        </p>
+      )}
     </form>
   );
 };
