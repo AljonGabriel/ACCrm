@@ -3,7 +3,7 @@ import { useState } from "react";
 import api from "../../config/axios";
 import DOMPurify from "dompurify";
 
-export default function StationAddInfoFrm({ station, onClose }) {
+export default function StationAddInfoFrm({ station, onClose, employees }) {
   const [hostname, setHostname] = useState(station?.hostname || "");
   const [ip, setIp] = useState(station?.ip || "");
   const [status, setStatus] = useState(station?.status || "Offline");
@@ -77,30 +77,6 @@ export default function StationAddInfoFrm({ station, onClose }) {
         </select>
       </div>
 
-      {/* Production */}
-      <div>
-        <label className="block text-sm font-medium">Production</label>
-        <select
-          value={production}
-          onChange={(e) => setProduction(e.target.value)}
-          className="w-full border p-2 rounded"
-        >
-          <option value="Prod 1">Prod 1</option>
-          <option value="Prod 2">Prod 2</option>
-        </select>
-      </div>
-
-      {/* Location */}
-      <div>
-        <label className="block text-sm font-medium">Location</label>
-        <input
-          type="text"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          className="w-full border p-2 rounded"
-        />
-      </div>
-
       {/* AnyDesk ID */}
       <div>
         <label className="block text-sm font-medium">AnyDesk ID</label>
@@ -126,12 +102,18 @@ export default function StationAddInfoFrm({ station, onClose }) {
       {/* Stationed */}
       <div>
         <label className="block text-sm font-medium">Stationed</label>
-        <input
-          type="text"
+        <select
           value={stationed}
           onChange={(e) => setStationed(e.target.value)}
           className="w-full border p-2 rounded"
-        />
+        >
+          <option value="">-- Select Employee --</option>
+          {employees.map((emp) => (
+            <option key={emp._id} value={emp.name}>
+              {emp.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Buttons */}

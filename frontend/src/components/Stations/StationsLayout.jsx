@@ -5,7 +5,7 @@ import StationCard from "./StationsCard";
 import GlobalModal from "../GlobalModal";
 import StationAddInfoFrm from "./StationAddInfoFrm";
 
-export default function StationsLayout({ stations }) {
+export default function StationsLayout({ stations, employees }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStation, setSelectedStation] = useState(null);
   const groupByLocation = (loc) => stations.filter((s) => s.location === loc);
@@ -97,6 +97,7 @@ export default function StationsLayout({ stations }) {
         {selectedStation && (
           <StationAddInfoFrm
             station={selectedStation}
+            employees={employees}
             onClose={() => setIsModalOpen(false)}
           />
         )}

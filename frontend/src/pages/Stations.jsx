@@ -6,6 +6,7 @@ import StationsLayout from "../components/Stations/StationsLayout";
 import api from "../config/axios";
 const Stations = () => {
   const [stations, setStations] = useState([]);
+  const [employees, setEmployees] = useState([]);
 
   useEffect(() => {
     api
@@ -14,10 +15,20 @@ const Stations = () => {
       .catch((err) => console.error("Error fetching stations:", err));
   }, []);
 
+  useEffect(() => {
+    api
+      .get("/employee/list")
+      .then((res) => {
+        setEmployees(res.data.employees || []);
+        console.log("Employees:", res.data);
+      })
+      .catch((err) => console.error("Error fetching employees:", err));
+  }, []);
+
   return (
     <>
       <Navbar />
-      <StationsLayout stations={stations} />
+      <StationsLayout stations={stations} employees={employees} />
     </>
   );
 };
