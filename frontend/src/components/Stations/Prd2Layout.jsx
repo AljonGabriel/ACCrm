@@ -15,46 +15,60 @@ export default function Prod2Layout({ stations, employees }) {
     setIsModalOpen(true);
   };
 
+  const frontStations = groupByLocation("Front");
+  const backStations = groupByLocation("Back");
+
   return (
     <div className="mx-auto max-w-6xl p-6">
       <h3 className="text-2xl font-bold mb-6 text-center">Prod 2</h3>
 
       {/* Front rows - 4 per row */}
       <section className="space-y-4">
-        {Array.from({
-          length: Math.ceil(groupByLocation("Front").length / 4),
-        }).map((_, rowIdx) => (
-          <div key={rowIdx} className="grid grid-cols-4 border border-gray-400">
-            {groupByLocation("Front")
-              .slice(rowIdx * 4, rowIdx * 4 + 4)
-              .map((station) => (
-                <StationCard
-                  key={station?._id}
-                  station={station}
-                  onEdit={handleCardClick}
-                />
-              ))}
-          </div>
-        ))}
+        {Array.from({ length: Math.ceil(frontStations.length / 4) }).map(
+          (_, rowIdx) => {
+            const rowStations = frontStations.slice(rowIdx * 4, rowIdx * 4 + 4);
+            return (
+              <div key={rowIdx} className="flex justify-between">
+                {/* First station separated */}
+                <div className="flex-1 flex justify-start">
+                  {rowStations[0] && (
+                    <StationCard
+                      key={rowStations[0]?._id}
+                      station={rowStations[0]}
+                      onEdit={handleCardClick}
+                    />
+                  )}
+                </div>
+
+                {/* Remaining 3 flush together */}
+                <div className="flex">
+                  {rowStations.slice(1).map((station) => (
+                    <StationCard
+                      key={station?._id}
+                      station={station}
+                      onEdit={handleCardClick}
+                    />
+                  ))}
+                </div>
+              </div>
+            );
+          },
+        )}
       </section>
 
-      {/* Back rows - 2 per row */}
-      <section className="space-y-4 mt-6">
-        {Array.from({
-          length: Math.ceil(groupByLocation("Back").length / 2),
-        }).map((_, rowIdx) => (
-          <div key={rowIdx} className="grid grid-cols-2 border border-gray-400">
-            {groupByLocation("Back")
-              .slice(rowIdx * 2, rowIdx * 2 + 2)
-              .map((station) => (
-                <StationCard
-                  key={station?._id}
-                  station={station}
-                  onEdit={handleCardClick}
-                />
-              ))}
+      {/* Back row - 2 stations aligned to the right */}
+      <section className="mt-6">
+        <div className="flex justify-end">
+          <div className="flex">
+            {backStations.map((station) => (
+              <StationCard
+                key={station?._id}
+                station={station}
+                onEdit={handleCardClick}
+              />
+            ))}
           </div>
-        ))}
+        </div>
       </section>
 
       {/* Global Modal */}
