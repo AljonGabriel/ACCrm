@@ -17,11 +17,11 @@ export default function StationCard({ station, onClick }) {
       <p className="text-xs text-gray-500">{station?.ip || "No IP yet"}</p>
       {/* MAC Address */}
       <p className="text-xs text-gray-500">
-        {station?.macaddress || "No MAC address yet"}
+        {station?.mac_address || "No MAC address yet"}
       </p>
       {/* Anydesk */}
       <p className="text-sm text-gray-600">
-        {station?.anydesk || "No Anydesk ID yet"}
+        {station?.anydesk_id || "No Anydesk ID yet"}
       </p>
     </div>
   );
