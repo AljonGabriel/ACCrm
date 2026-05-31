@@ -21,63 +21,47 @@ const EmpTables = () => {
   return (
     <div className="mx-auto max-w-7xl p-6 space-y-10">
       {Object.keys(groupedEmployees).length === 0 ? (
-        <p className="text-center text-gray-600">No employees found.</p>
+        <p className="text-center text-gray-500">No employees found.</p>
       ) : (
         Object.keys(groupedEmployees).map((department) => (
-          <div
-            key={department}
-            className="border rounded-xl shadow-lg bg-white p-6"
-          >
+          <div key={department} className="card bg-base-100 shadow-xl p-6">
             {/* Department header */}
             <div className="flex items-center justify-between mb-4 border-b pb-3">
-              <h3 className="text-2xl font-semibold text-gray-800">
-                {department}
-              </h3>
-              <span className="text-sm text-gray-500">
+              <h3 className="text-2xl font-bold">{department}</h3>
+              <span className="badge badge-outline">
                 {groupedEmployees[department].length} employees
               </span>
             </div>
 
             {/* Employee table */}
             <div className="overflow-x-auto">
-              <table className="min-w-full border-collapse text-sm">
-                <thead className="bg-gray-50 text-gray-700 uppercase text-xs">
+              <table className="table table-zebra w-full">
+                <thead>
                   <tr>
-                    <th className="px-4 py-3 text-left border">Name</th>
-                    <th className="px-4 py-3 text-left border">Position</th>
-                    <th className="px-4 py-3 text-left border">Department</th>
-                    <th className="px-4 py-3 text-left border">Email</th>
-                    <th className="px-4 py-3 text-center border">Actions</th>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Department</th>
+                    <th>Email</th>
+                    <th className="text-center">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {groupedEmployees[department].map((employee, idx) => (
-                    <tr
-                      key={employee._id}
-                      className={`${
-                        idx % 2 === 0 ? "bg-white" : "bg-gray-50"
-                      } hover:bg-blue-50 transition`}
-                    >
-                      <td className="px-4 py-3 border font-medium text-gray-800">
-                        {employee.name}
-                      </td>
-                      <td className="px-4 py-3 border">
-                        <span className="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700 font-semibold">
+                  {groupedEmployees[department].map((employee) => (
+                    <tr key={employee._id}>
+                      <td className="font-medium">{employee.name}</td>
+                      <td>
+                        <span className="badge badge-info">
                           {employee.position}
                         </span>
                       </td>
-                      <td className="px-4 py-3 border text-gray-600">
-                        {employee.department}
-                      </td>
-                      <td className="px-4 py-3 border text-gray-600">
-                        {employee.email}
-                      </td>
-                      <td className="px-4 py-3 border text-center">
+                      <td>{employee.department}</td>
+                      <td>{employee.email}</td>
+                      <td className="text-center">
                         <div className="flex justify-center gap-2">
-                          <button className="px-3 py-1 text-xs bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition">
+                          <button className="btn btn-xs btn-warning">
                             Edit
                           </button>
-                          <button className="px-3 py-1 text-xs bg-red-600 text-white rounded-md hover:bg-red-700 transition">
+                          <button className="btn btn-xs btn-error">
                             Delete
                           </button>
                         </div>
