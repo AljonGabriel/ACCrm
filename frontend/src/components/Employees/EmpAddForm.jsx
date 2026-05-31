@@ -69,172 +69,153 @@ export default function EmpAddForm({ onAdded, items }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
-      {/* EMP ID */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          EMP ID
+      <div className="space-y-4">
+        {/* EMP ID */}
+        <label className="input input-bordered w-full flex items-center gap-2">
+          <input
+            type="text"
+            name="emp_id"
+            value={formData.emp_id}
+            onChange={handleChange}
+            className="grow"
+            placeholder="EMP ID"
+            required
+          />
         </label>
-        <input
-          name="emp_id"
-          value={formData.emp_id}
-          onChange={handleChange}
-          className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
-          required
-        />
-      </div>
-      {/* Name */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Name <span className="text-red-600">*</span>
-        </label>
-        <input
-          name="name"
-          placeholder="ex.John Doe"
-          value={formData.name}
-          onChange={handleChange}
-          className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
-          required
-        />
-      </div>
 
-      {/* Email */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Email
+        {/* Name */}
+        <label className="input input-bordered w-full flex items-center gap-2">
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            className="grow"
+            placeholder="Name *"
+            required
+          />
         </label>
-        <input
-          type="email"
-          name="email"
-          placeholder="@domain.com"
-          value={formData.email}
-          onChange={handleChange}
-          className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
-        />
-      </div>
 
-      {/* Position Dropdown */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Position <span className="text-red-600">*</span>
+        {/* Email */}
+        <label className="input input-bordered w-full flex items-center gap-2">
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className="grow"
+            placeholder="Email"
+          />
         </label>
-        <select
-          name="position"
-          value={formData.position}
-          onChange={handleChange}
-          className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
-          required
-        >
-          <option value="">...</option>
-          <option value="CSR">CSR</option>
-          <option value="PDA">PDA</option>
-          <option value="HR">HR</option>
-          <option value="TL">TL</option>
-          <option value="SME">SME</option>
-          <option value="OM">OM</option>
-          <option value="Manager">Manager</option>
-        </select>
-      </div>
 
-      {/* Department Dropdown */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Department <span className="text-red-600">*</span>
+        {/* Position */}
+        <label className="input input-bordered w-full flex items-center gap-2">
+          <select
+            name="position"
+            value={formData.position}
+            onChange={handleChange}
+            className="grow"
+            required
+          >
+            <option value="">Position *</option>
+            <option value="IT">IT</option>
+            <option value="CSR">CSR</option>
+            <option value="PDA">PDA</option>
+            <option value="HR">HR</option>
+            <option value="TL">TL</option>
+            <option value="SME">SME</option>
+            <option value="OM">OM</option>
+            <option value="Manager">Manager</option>
+          </select>
         </label>
-        <select
-          name="department"
-          value={formData.department}
-          onChange={handleChange}
-          className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
-          required
-        >
-          <option value="">...</option>
-          <option value="ITD">ITD</option>
-          <option value="HRD">HRD</option>
-          <option value="PROD">PROD</option>
-        </select>
-      </div>
 
-      {/* Client Dropdown */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Client <span className="text-red-600">*</span>
+        {/* Department */}
+        <label className="input input-bordered w-full flex items-center gap-2">
+          <select
+            name="department"
+            value={formData.department}
+            onChange={handleChange}
+            className="grow"
+            required
+          >
+            <option value="">Department *</option>
+            <option value="ITD">ITD</option>
+            <option value="HRD">HRD</option>
+            <option value="PROD">PROD</option>
+          </select>
         </label>
-        <select
-          name="client"
-          value={formData.client}
-          onChange={handleChange}
-          className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
-          required
-        >
-          <option value="">...</option>
-          <option value="Andrienne Williams">Andrienne Williams</option>
-          <option value="Shoppify">Shoppify</option>
-        </select>
-      </div>
 
-      {/* Status Dropdown */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Status <span className="text-red-600">*</span>
+        {/* Client */}
+        <label className="input input-bordered w-full flex items-center gap-2">
+          <select
+            name="client"
+            value={formData.client}
+            onChange={handleChange}
+            className="grow"
+            required
+          >
+            <option value="">Client *</option>
+            <option value="Internal">Internal</option>
+            <option value="Andrienne Williams">Andrienne Williams</option>
+            <option value="Shoppify">Shoppify</option>
+          </select>
         </label>
-        <select
-          name="status"
-          value={formData.status}
-          onChange={handleChange}
-          className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
-          required
-        >
-          <option value="">...</option>
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-        </select>
-      </div>
 
-      {/* Contact */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Contact
+        {/* Status */}
+        <label className="input input-bordered w-full flex items-center gap-2">
+          <select
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+            className="grow"
+            required
+          >
+            <option value="">Status *</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
         </label>
-        <input
-          name="contact"
-          placeholder="ex.0912******"
-          value={formData.contact}
-          onChange={handleChange}
-          className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
-        />
-      </div>
 
-      {/* Generic Item Endorsed Dropdown */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Item Endorsed
+        {/* Contact */}
+        <label className="input input-bordered w-full flex items-center gap-2">
+          <input
+            type="text"
+            name="contact"
+            value={formData.contact}
+            onChange={handleChange}
+            className="grow"
+            placeholder="Contact"
+          />
         </label>
-        <select
-          name="item_endorsed"
-          value={formData.item_endorsed || ""}
-          onChange={handleChange}
-          className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
-        >
-          <option value="">...</option>
-          {items && items.length > 0 ? (
-            items.map((item) => (
-              <option key={item._id} value={item.item_name}>
-                {item.item_name}{" "}
-                {item.serial_number ? `(${item.serial_number})` : ""}
-              </option>
-            ))
-          ) : (
-            <option disabled>No items available</option>
-          )}
-        </select>
-      </div>
 
-      <button
-        type="submit"
-        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow-md transition"
-      >
-        Save Employee
-      </button>
+        {/* Item Endorsed */}
+        <label className="input input-bordered w-full flex items-center gap-2">
+          <select
+            name="item_endorsed"
+            value={formData.item_endorsed || ""}
+            onChange={handleChange}
+            className="grow"
+          >
+            <option value="">Item Endorsed</option>
+            <option value="None">None</option>
+            {items && items.length > 0 ? (
+              items.map((item) => (
+                <option key={item._id} value={item.item_name}>
+                  {item.item_name}{" "}
+                  {item.serial_number ? `(${item.serial_number})` : ""}
+                </option>
+              ))
+            ) : (
+              <option disabled>No items available</option>
+            )}
+          </select>
+        </label>
+
+        {/* Save Button */}
+        <button type="submit" className="btn btn-primary w-full">
+          Save Employee
+        </button>
+      </div>
     </form>
   );
 }

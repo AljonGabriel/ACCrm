@@ -6,7 +6,6 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 export default function InvItemTables({ employees, items, onSetItems }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
@@ -28,15 +27,11 @@ export default function InvItemTables({ employees, items, onSetItems }) {
 
   const defectiveItems = items.filter((item) => item.status === "Defective");
 
-  const tableClass =
-    "w-full border border-gray-400 rounded-md shadow-sm text-sm";
-  const cellClass = "px-2 py-1 border text-center";
-
   // Skeleton row generator
   const SkeletonRow = ({ cols }) => (
     <tr>
       {Array.from({ length: cols }).map((_, idx) => (
-        <td key={idx} className={cellClass}>
+        <td key={idx}>
           <Skeleton height={20} />
         </td>
       ))}
@@ -46,7 +41,7 @@ export default function InvItemTables({ employees, items, onSetItems }) {
   return (
     <div className="py-6 space-y-8 overflow-x-auto">
       {/* ✅ General table */}
-      <div className="overflow-x-auto max-w-full border border-gray-400 rounded-md shadow-sm p-4">
+      <div className="overflow-x-auto">
         <div className="flex items-center gap-2 mb-2">
           <h3 className="text-lg font-semibold">All Items</h3>
           <small className="text-gray-600">({items.length})</small>
@@ -63,17 +58,17 @@ export default function InvItemTables({ employees, items, onSetItems }) {
           />
         </div>
 
-        <table className={tableClass}>
+        <table className="table table-sm">
           <thead className="bg-gray-100">
             <tr>
-              <th className={cellClass}>Category</th>
-              <th className={cellClass}>Item</th>
-              <th className={cellClass}>SN</th>
-              <th className={cellClass}>Status</th>
-              <th className={cellClass}>Stock</th>
-              <th className={cellClass}>Date Added</th>
-              <th className={cellClass}>Endorsed</th>
-              <th className={cellClass}>Actions</th>
+              <th>Category</th>
+              <th>Item</th>
+              <th>SN</th>
+              <th>Status</th>
+              <th>Stock</th>
+              <th>Date Added</th>
+              <th>Endorsed</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -105,26 +100,30 @@ export default function InvItemTables({ employees, items, onSetItems }) {
                   )
                   .map((item) => (
                     <tr key={item._id} className="hover:bg-gray-50">
-                      <td className={cellClass}>{item.category}</td>
-                      <td className={cellClass}>{item.item_name}</td>
-                      <td className={cellClass}>{item.serial_number}</td>
-                      <td className={cellClass}>{item.status}</td>
-                      <td className={cellClass}>{item.stock}</td>
-                      <td className={cellClass}>{item.date_added}</td>
-                      <td className={cellClass}>
-                        <b>{item.endorsed || "Not Endorsed"}</b>
+                      <td>{item.category}</td>
+                      <td>{item.item_name}</td>
+                      <td>{item.serial_number}</td>
+                      <td>{item.status}</td>
+                      <td>{item.stock}</td>
+                      <td>{item.date_added}</td>
+                      <td>
+                        <b>{item.endorsed || "Stock"}</b>
                       </td>
-                      <td className={cellClass}>
+                      <td>
                         <div className="flex gap-1">
+                          {/* Trigger button */}
                           <button
+                            className="btn btn-secondary btn-xs"
                             onClick={() => {
-                              setSelectedItem(item);
-                              setIsModalOpen(true);
+                              setSelectedItem(item); // <-- make sure you set the item here
+                              document
+                                .getElementById("update_item_modal")
+                                .showModal();
                             }}
-                            className="bg-yellow-600 hover:bg-yellow-700 text-white text-xs px-2 py-1 rounded shadow-sm transition"
                           >
                             Update
                           </button>
+
                           <InvDelItemBtn
                             itemId={item._id}
                             onSetItems={onSetItems}
@@ -139,10 +138,7 @@ export default function InvItemTables({ employees, items, onSetItems }) {
 
       {/* ✅ Category tables */}
       {Object.keys(groupedItems).map((category) => (
-        <div
-          key={category}
-          className="max-w-full border border-gray-400 rounded-md shadow-sm p-4"
-        >
+        <div key={category} className="overflow-x-auto">
           <div className="flex items-center gap-2 mb-2">
             <h3 className="text-lg font-semibold">{category}</h3>
             <small className="text-gray-600">
@@ -150,16 +146,16 @@ export default function InvItemTables({ employees, items, onSetItems }) {
             </small>
           </div>
 
-          <table className={tableClass}>
+          <table className="table table-sm">
             <thead className="bg-gray-100">
               <tr>
-                <th className={cellClass}>Name</th>
-                <th className={cellClass}>SN</th>
-                <th className={cellClass}>Status</th>
-                <th className={cellClass}>Stock</th>
-                <th className={cellClass}>Date Added</th>
-                <th className={cellClass}>Endorsed</th>
-                <th className={cellClass}>Actions</th>
+                <th>Name</th>
+                <th>SN</th>
+                <th>Status</th>
+                <th>Stock</th>
+                <th>Date Added</th>
+                <th>Endorsed</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -169,22 +165,25 @@ export default function InvItemTables({ employees, items, onSetItems }) {
                   ))
                 : groupedItems[category].map((item) => (
                     <tr key={item._id} className="hover:bg-gray-50">
-                      <td className={cellClass}>{item.item_name}</td>
-                      <td className={cellClass}>{item.serial_number}</td>
-                      <td className={cellClass}>{item.status}</td>
-                      <td className={cellClass}>{item.stock}</td>
-                      <td className={cellClass}>{item.date_added}</td>
-                      <td className={cellClass}>
-                        <b>{item.endorsed || "Not Endorsed"}</b>
+                      <td>{item.item_name}</td>
+                      <td>{item.serial_number}</td>
+                      <td>{item.status}</td>
+                      <td>{item.stock}</td>
+                      <td>{item.date_added}</td>
+                      <td>
+                        <b>{item.endorsed || "Stock"}</b>
                       </td>
-                      <td className={cellClass}>
+                      <td>
                         <div className="flex gap-1">
+                          {/* Trigger button */}
                           <button
+                            className="btn btn-secondary btn-xs"
                             onClick={() => {
-                              setSelectedItem(item);
-                              setIsModalOpen(true);
+                              setSelectedItem(item); // <-- make sure you set the item here
+                              document
+                                .getElementById("update_item_modal")
+                                .showModal();
                             }}
-                            className="bg-yellow-600 hover:bg-yellow-700 text-white text-xs px-2 py-1 rounded shadow-sm transition"
                           >
                             Update
                           </button>
@@ -202,21 +201,21 @@ export default function InvItemTables({ employees, items, onSetItems }) {
       ))}
 
       {defectiveItems.length > 0 && (
-        <div className="overflow-x-auto max-w-full border border-gray-400 rounded-md shadow-sm p-4">
+        <div className="overflow-x-auto">
           <div className="flex items-center gap-2 mb-2">
             <h3 className="text-lg font-semibold text-red-600">
               Defective Items
             </h3>
             <small className="text-gray-600">({defectiveItems.length})</small>
           </div>
-          <table className={tableClass}>
+          <table className="table table-sm">
             <thead className="bg-gray-100">
               <tr>
-                <th className={cellClass}>Item</th>
-                <th className={cellClass}>SN</th>
-                <th className={cellClass}>Defective Date</th>
-                <th className={cellClass}>Defective Issue</th>
-                <th className={cellClass}>Last Use (Endorsed By)</th>
+                <th>Item</th>
+                <th>SN</th>
+                <th>Defective Date</th>
+                <th>Defective Issue</th>
+                <th>Last Use (Endorsed By)</th>
               </tr>
             </thead>
             <tbody>
@@ -226,15 +225,11 @@ export default function InvItemTables({ employees, items, onSetItems }) {
                   ))
                 : defectiveItems.map((item) => (
                     <tr key={item._id} className="hover:bg-gray-50">
-                      <td className={cellClass}>{item.item_name}</td>
-                      <td className={cellClass}>{item.serial_number}</td>
-                      <td className={cellClass}>
-                        {item.defective_date || "—"}
-                      </td>
-                      <td className={cellClass}>
-                        {item.defective_issue || "—"}
-                      </td>
-                      <td className={cellClass}>
+                      <td>{item.item_name}</td>
+                      <td>{item.serial_number}</td>
+                      <td>{item.defective_date || "—"}</td>
+                      <td>{item.defective_issue || "—"}</td>
+                      <td>
                         <b>{item.endorsed || "Not Endorsed"}</b>
                       </td>
                     </tr>
@@ -245,17 +240,12 @@ export default function InvItemTables({ employees, items, onSetItems }) {
       )}
 
       {/* ✅ Single modal outside the loop */}
-      <GlobalModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="Update Item"
-      >
+      <GlobalModal title="Update Item" id="update_item_modal">
         {selectedItem && (
           <InvUpdateItem
             item={selectedItem}
             employees={employees}
             onSetItems={onSetItems}
-            onSuccess={() => setIsModalOpen(false)}
           />
         )}
       </GlobalModal>

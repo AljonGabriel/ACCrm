@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import api from "../../config/axios";
 import { toast } from "react-toastify";
 
-export default function AddItemForm({ onSetItems, employees, onSuccess }) {
+export default function AddItemForm({ onSetItems, employees }) {
   const [formData, setFormData] = useState({
     category: "",
     item_name: "",
@@ -27,9 +27,6 @@ export default function AddItemForm({ onSetItems, employees, onSuccess }) {
         onSetItems((prev) => [...prev, res.data.item]);
       }
 
-      // ✅ Close modal after success
-      if (onSuccess) onSuccess();
-
       setFormData({
         category: "",
         item_name: "",
@@ -52,105 +49,179 @@ export default function AddItemForm({ onSetItems, employees, onSuccess }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Category
-        </label>
-        <select
-          name="category"
-          value={formData.category}
-          onChange={handleChange}
-          className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
-          required
-        >
-          <option value="" disabled>
-            ...
-          </option>
-          <option value="Headset">Headset</option>
-          <option value="Printer">Printer</option>
-          <option value="Mouse">Mouse</option>
-          <option value="Monitor">Monitor</option>
-          <option value="Keyboard">Keyboard</option>
-          <option value="Laptop">Laptop</option>
-          <option value="Desktop">Desktop</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium">Item Name</label>
-        <input
-          name="item_name"
-          value={formData.item_name}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium">Serial Number</label>
-        <input
-          name="serial_number"
-          value={formData.serial_number}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Status
-        </label>
-        <select
-          name="status"
-          value={formData.status}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        >
-          <option value="">...</option>
-          <option value="Working">Working</option>
-          <option value="Defective">Defective</option>
-          <option value="Missing">Missing</option>
-        </select>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium">Stock</label>
-        <input
-          name="stock"
-          value={formData.stock}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Endorsed By
-        </label>
-        <select
-          name="endorsed"
-          value={formData.endorsed}
-          onChange={handleChange}
-          className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
-        >
-          <option value="Not Endorsed">Not Endorsed</option>
-          {employees.map((emp) => (
-            <option key={emp._id} value={emp.name}>
-              {emp.name} — {emp.position}
+      <div className="space-y-4">
+        {/* Category */}
+        <label className="w-full input input-bordered flex items-center gap-2">
+          <svg
+            className="h-4 w-4 opacity-50"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+          <select
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            className="grow"
+            required
+          >
+            <option value="" disabled>
+              Category...
             </option>
-          ))}
-        </select>
-      </div>
+            <option value="Headset">Headset</option>
+            <option value="Printer">Printer</option>
+            <option value="Mouse">Mouse</option>
+            <option value="Monitor">Monitor</option>
+            <option value="Keyboard">Keyboard</option>
+            <option value="Laptop">Laptop</option>
+            <option value="Desktop">Desktop</option>
+            <option value="Other">Other</option>
+          </select>
+        </label>
 
-      <div className="py-3">
-        <button
-          type="submit"
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow-md transition"
-        >
-          Save Item
-        </button>
+        {/* Item Name */}
+        <label className="w-full input input-bordered flex items-center gap-2">
+          <svg
+            className="h-4 w-4 opacity-50"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+          <input
+            type="text"
+            name="item_name"
+            value={formData.item_name}
+            onChange={handleChange}
+            className="grow"
+            placeholder="Item Name"
+            required
+          />
+        </label>
+
+        {/* Serial Number */}
+        <label className="w-full input input-bordered flex items-center gap-2">
+          <svg
+            className="h-4 w-4 opacity-50"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              d="M12 2v20M2 12h20"
+            />
+          </svg>
+          <input
+            type="text"
+            name="serial_number"
+            value={formData.serial_number}
+            onChange={handleChange}
+            className="grow"
+            placeholder="Serial Number"
+          />
+        </label>
+
+        {/* Status */}
+        <label className="w-full input input-bordered flex items-center gap-2">
+          <svg
+            className="h-4 w-4 opacity-50"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="2"
+              fill="none"
+            />
+          </svg>
+          <select
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+            className="grow"
+          >
+            <option value="">Status...</option>
+            <option value="Working">Working</option>
+            <option value="Defective">Defective</option>
+            <option value="Missing">Missing</option>
+          </select>
+        </label>
+
+        {/* Stock */}
+        <label className="w-full input input-bordered flex items-center gap-2">
+          <svg
+            className="h-4 w-4 opacity-50"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              d="M4 4h16v16H4z"
+            />
+          </svg>
+          <input
+            type="number"
+            name="stock"
+            value={formData.stock}
+            onChange={handleChange}
+            className="grow"
+            placeholder="Stock"
+          />
+        </label>
+
+        {/* Endorsed By */}
+        <label className="w-full input input-bordered flex items-center gap-2">
+          <svg
+            className="h-4 w-4 opacity-50"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v2h20v-2c0-3.3-6.7-5-10-5z"
+            />
+          </svg>
+          <select
+            name="endorsed"
+            value={formData.endorsed}
+            onChange={handleChange}
+            className="grow"
+          >
+            <option value="Not Endorsed">Not Endorsed</option>
+            {employees.map((emp) => (
+              <option key={emp._id} value={emp.name}>
+                {emp.name} — {emp.position}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        {/* Save Button */}
+        <div className="pt-3">
+          <button type="submit" className="btn btn-primary w-full">
+            Save Item
+          </button>
+        </div>
       </div>
     </form>
   );

@@ -30,23 +30,15 @@ const Inventory = () => {
       <div className="p-6">
         {/* Trigger button */}
         <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow-md transition"
+          className="btn btn-primary"
+          onClick={() => document.getElementById("add_item_modal").showModal()}
         >
           + Add
         </button>
 
         {/* Global modal with AddItemForm inside */}
-        <GlobalModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          title="New Item"
-        >
-          <InvAddItemForm
-            employees={employees}
-            onSetItems={setItems}
-            onSuccess={() => setIsModalOpen(false)}
-          />
+        <GlobalModal id="add_item_modal" title="New Item">
+          <InvAddItemForm employees={employees} onSetItems={setItems} />
         </GlobalModal>
 
         <InvItemTables

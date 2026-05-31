@@ -2,12 +2,7 @@ import { useState } from "react";
 import api from "../../config/axios";
 import { toast } from "react-toastify";
 
-export default function InvUpdateItem({
-  item,
-  onSetItems,
-  employees,
-  onSuccess,
-}) {
+export default function InvUpdateItem({ item, onSetItems, employees }) {
   const [formData, setFormData] = useState({
     category: item.category,
     item_name: item.item_name,
@@ -35,9 +30,6 @@ export default function InvUpdateItem({
           prev.map((i) => (i._id === res.data.item._id ? res.data.item : i)),
         );
       }
-
-      // ✅ Close modal
-      if (onSuccess) onSuccess();
     } catch (err) {
       // ✅ Reliable error handling
       if (err.response && err.response.data && err.response.data.detail) {

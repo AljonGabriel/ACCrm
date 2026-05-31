@@ -1,13 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import EmpAddForm from "../components/Employees/EmpAddForm";
 import GlobalModal from "../components/GlobalModal";
-import { useState } from "react";
 import EmpTables from "../components/Employees/EmpTables";
 import api from "../config/axios";
 
 const Employees = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [items, setItems] = useState([]);
 
   useEffect(() => {
@@ -15,15 +13,10 @@ const Employees = () => {
       .get("inventory/list")
       .then((res) => {
         const grouped = res.data.grouped || {};
-
-        // ✅ Use the correct key from your JSON: "Headset"
         const headsetGroup = grouped["Headset"] || [];
-
-        // ✅ Remove defective items
         const workingHeadsets = headsetGroup.filter(
           (item) => item.status !== "Defective",
         );
-
         setItems(workingHeadsets);
         console.log("Headset items (non-defective):", workingHeadsets);
       })
@@ -34,27 +27,32 @@ const Employees = () => {
     <>
       <Navbar />
 
-      {/* Trigger button */}
-      <button
-        onClick={() => setIsModalOpen(true)}
-        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow-md transition"
-      >
-        + Add
-      </button>
+      {/* Page container */}
+      <div className="p-6 space-y-6">
+        {/* Trigger button */}
+        <div className="flex justify-start">
+          <button
+            className="btn btn-primary w-full sm:w-auto"
+            onClick={() =>
+              document.getElementById("employee_modal").showModal()
+            }
+          >
+            + Add
+          </button>
+        </div>
 
-      {/* Global modal with AddItemForm inside */}
-      <GlobalModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="New Employee"
-      >
-        <EmpAddForm onSuccess={() => setIsModalOpen(false)} items={items} />
-      </GlobalModal>
-      <div className="p-6">
-        <h1 className="text-2xl font-bold mb-4">Employees Page</h1>
-        <p>This is where employee management features will go.</p>
+        {/* DaisyUI modal */}
+        <GlobalModal id="employee_modal" title="New Employee">
+          <div className="p-4">
+            <EmpAddForm items={items} />
+          </div>
+        </GlobalModal>
+
+        {/* Employee tables */}
+        <div className="mt-6">
+          <EmpTables />
+        </div>
       </div>
-      <EmpTables />
     </>
   );
 };

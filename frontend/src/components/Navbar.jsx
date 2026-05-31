@@ -4,7 +4,7 @@ import { logout } from "../utils/auth";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [timezone, setTimezone] = useState("PH"); // default Philippine time
+  const [timezone, setTimezone] = useState("EST");
   const [currentTime, setCurrentTime] = useState("");
 
   const handleLogout = () => {
@@ -12,81 +12,107 @@ const Navbar = () => {
     navigate("/");
   };
 
-  // Function to format time based on selected timezone
   const getTimeForZone = (zone) => {
     const now = new Date();
-    let options = { hour: "2-digit", minute: "2-digit", second: "2-digit" };
+    let options = {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    };
 
-    if (zone === "PH") {
-      return now.toLocaleTimeString("en-US", {
-        ...options,
-        timeZone: "Asia/Manila",
-      });
-    } else if (zone === "EST") {
-      return now.toLocaleTimeString("en-US", {
-        ...options,
-        timeZone: "America/New_York",
-      });
-    }
-    return now.toLocaleTimeString();
+    let formatted = now.toLocaleTimeString("en-US", {
+      ...options,
+      timeZone: zone === "PH" ? "Asia/Manila" : "America/New_York",
+    });
+
+    // Split into [time, AM/PM]
+    const [time, period] = formatted.split(" ");
+    return { time, period };
   };
 
-  // Update time every second
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(getTimeForZone(timezone));
     }, 1000);
-
     return () => clearInterval(interval);
   }, [timezone]);
 
   return (
-    <nav className="bg-blue-600 text-white px-6 py-3 shadow-md">
-      <div className="flex justify-between items-center">
-        {/* Left side navigation links */}
-        <div className="flex space-x-6">
-          <Link to="/home" className="hover:text-gray-200">
-            Home
-          </Link>
-          <Link to="/inventory" className="hover:text-gray-200">
-            Inventory
-          </Link>
-          <Link to="/kb" className="hover:text-gray-200">
-            KB
-          </Link>
-          <Link to="/employees" className="hover:text-gray-200">
-            Employees
-          </Link>
-          <Link to="/stations" className="hover:text-gray-200">
-            Stations
-          </Link>
-        </div>
-
-        {/* Right side controls */}
-        <div className="flex items-center space-x-4">
-          {/* Timezone dropdown + live time */}
-          <div className="flex items-center space-x-2">
-            <span className="text-sm">{currentTime}</span>
-            <select
-              value={timezone}
-              onChange={(e) => setTimezone(e.target.value)}
-              className="bg-white text-blue-600 px-2 py-1 rounded text-sm"
-            >
-              <option value="PH">Philippines (PHT)</option>
-              <option value="EST">Eastern US (EST)</option>
-            </select>
-          </div>
-
-          {/* Logout button */}
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-sm font-medium"
+    <div className="navbar bg-blue-600 text-primary-content px-6 shadow-md">
+      {/* Left side */}
+      <div className="flex-1">
+        {/* Mobile dropdown */}
+        <div className="dropdown lg:hidden">
+          <label tabIndex={0} className="btn btn-ghost">
+            ☰
+          </label>
+          <ul
+            tabIndex={0}
+            className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 text-black"
           >
-            Logout
-          </button>
+            <li>
+              <Link to="/home">Home</Link>
+            </li>
+            <li>
+              <Link to="/inventory">Inventory</Link>
+            </li>
+            <li>
+              <Link to="/kb">KB</Link>
+            </li>
+            <li>
+              <Link to="/employees">Employees</Link>
+            </li>
+            <li>
+              <Link to="/stations">Stations</Link>
+            </li>
+          </ul>
         </div>
+
+        {/* Desktop menu */}
+        <ul className="menu menu-horizontal hidden lg:flex px-1">
+          <li>
+            <Link to="/home">Home</Link>
+          </li>
+          <li>
+            <Link to="/inventory">Inventory</Link>
+          </li>
+          <li>
+            <Link to="/kb">KB</Link>
+          </li>
+          <li>
+            <Link to="/employees">Employees</Link>
+          </li>
+          <li>
+            <Link to="/stations">Stations</Link>
+          </li>
+        </ul>
       </div>
-    </nav>
+
+      {/* Right side */}
+      <div className="flex-none flex items-center gap-4">
+        {/* Time + dropdown */}
+        <div className="text-sm font-mono flex items-baseline gap-1">
+          <div>
+            <span>{currentTime.time}</span>
+            <span className="font-bold">{currentTime.period}</span>
+          </div>
+          <select
+            value={timezone}
+            onChange={(e) => setTimezone(e.target.value)}
+            className="select select-bordered select-sm text-primary"
+          >
+            <option value="EST">(EST)</option>
+            <option value="PH">(PHT)</option>
+          </select>
+        </div>
+
+        {/* Logout button */}
+        <button onClick={handleLogout} className="btn btn-error btn-sm">
+          Logout
+        </button>
+      </div>
+    </div>
   );
 };
 
