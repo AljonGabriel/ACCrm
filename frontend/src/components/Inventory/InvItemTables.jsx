@@ -10,6 +10,9 @@ export default function InvItemTables({ employees, items, onSetItems }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
 
+  // ✅ New state for category filters
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
   useEffect(() => {
     if (items && items.length > 0) {
       setLoading(false);
@@ -47,28 +50,65 @@ export default function InvItemTables({ employees, items, onSetItems }) {
           <small className="text-gray-600">({items.length})</small>
         </div>
 
-        <div className="mb-4">
+        {/* Search + Filters */}
+        <div className="mb-4 space-y-2">
           <input
             type="text"
             placeholder="Search items..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
+            className="input"
             disabled={loading}
           />
+
+          {/* Category filter checkboxes */}
+          <div className="flex flex-wrap gap-4">
+            {[
+              "Headset",
+              "Printer",
+              "Mouse",
+              "Monitor",
+              "Keyboard",
+              "Laptop",
+              "Desktop",
+              "Other",
+            ].map((cat) => (
+              <label
+                key={cat}
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  className="checkbox checkbox-xs"
+                  checked={selectedCategories.includes(cat)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedCategories([...selectedCategories, cat]);
+                    } else {
+                      setSelectedCategories(
+                        selectedCategories.filter((c) => c !== cat),
+                      );
+                    }
+                  }}
+                />
+                <small>{cat}</small>
+              </label>
+            ))}
+          </div>
         </div>
 
-        <table className="table table-sm">
+        {/* Table */}
+        <table className="table table-xs table-fixed w-full">
           <thead className="bg-gray-100">
             <tr>
-              <th>Category</th>
-              <th>Item</th>
-              <th>SN</th>
-              <th>Status</th>
-              <th>Stock</th>
-              <th>Date Added</th>
-              <th>Endorsed</th>
-              <th>Actions</th>
+              <th className="w-28">Category</th>
+              <th className="w-40">Item</th>
+              <th className="w-32">SN</th>
+              <th className="w-24">Status</th>
+              <th className="w-20">Stock</th>
+              <th className="w-36">Date Added</th>
+              <th className="w-40">Endorsed</th>
+              <th className="w-32">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -77,8 +117,8 @@ export default function InvItemTables({ employees, items, onSetItems }) {
                   <SkeletonRow key={idx} cols={8} />
                 ))
               : items
-                  .filter(
-                    (item) =>
+                  .filter((item) => {
+                    const matchesSearch =
                       item.item_name
                         .toLowerCase()
                         .includes(searchTerm.toLowerCase()) ||
@@ -93,16 +133,22 @@ export default function InvItemTables({ employees, items, onSetItems }) {
                         .includes(searchTerm.toLowerCase()) ||
                       item.endorsed
                         .toLowerCase()
-                        .includes(searchTerm.toLowerCase()),
-                  )
+                        .includes(searchTerm.toLowerCase());
+
+                    const matchesCategory =
+                      selectedCategories.length === 0 ||
+                      selectedCategories.includes(item.category);
+
+                    return matchesSearch && matchesCategory;
+                  })
                   .sort(
                     (a, b) => new Date(b.date_added) - new Date(a.date_added),
                   )
                   .map((item) => (
                     <tr key={item._id} className="hover:bg-gray-50">
                       <td>{item.category}</td>
-                      <td>{item.item_name}</td>
-                      <td>{item.serial_number}</td>
+                      <td className="truncate">{item.item_name}</td>
+                      <td className="truncate">{item.serial_number}</td>
                       <td>{item.status}</td>
                       <td>{item.stock}</td>
                       <td>{item.date_added}</td>
@@ -111,11 +157,10 @@ export default function InvItemTables({ employees, items, onSetItems }) {
                       </td>
                       <td>
                         <div className="flex gap-1">
-                          {/* Trigger button */}
                           <button
                             className="btn btn-secondary btn-xs"
                             onClick={() => {
-                              setSelectedItem(item); // <-- make sure you set the item here
+                              setSelectedItem(item);
                               document
                                 .getElementById("update_item_modal")
                                 .showModal();
@@ -123,7 +168,6 @@ export default function InvItemTables({ employees, items, onSetItems }) {
                           >
                             Update
                           </button>
-
                           <InvDelItemBtn
                             itemId={item._id}
                             onSetItems={onSetItems}
@@ -146,16 +190,16 @@ export default function InvItemTables({ employees, items, onSetItems }) {
             </small>
           </div>
 
-          <table className="table table-sm">
+          <table className="table table-xs">
             <thead className="bg-gray-100">
               <tr>
-                <th>Name</th>
-                <th>SN</th>
-                <th>Status</th>
-                <th>Stock</th>
-                <th>Date Added</th>
-                <th>Endorsed</th>
-                <th>Actions</th>
+                <th className="w-40">Item</th>
+                <th className="w-32">SN</th>
+                <th className="w-24">Status</th>
+                <th className="w-20">Stock</th>
+                <th className="w-36">Date Added</th>
+                <th className="w-40">Endorsed</th>
+                <th className="w-32">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -208,7 +252,7 @@ export default function InvItemTables({ employees, items, onSetItems }) {
             </h3>
             <small className="text-gray-600">({defectiveItems.length})</small>
           </div>
-          <table className="table table-sm">
+          <table className="table table-xs">
             <thead className="bg-gray-100">
               <tr>
                 <th>Item</th>

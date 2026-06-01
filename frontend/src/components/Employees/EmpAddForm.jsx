@@ -68,10 +68,21 @@ export default function EmpAddForm({ onAdded, items }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3">
+    <form onSubmit={handleSubmit}>
       <div className="space-y-4">
         {/* EMP ID */}
         <label className="input input-bordered w-full flex items-center gap-2">
+          <svg
+            className="h-4 w-4 opacity-50"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <rect x="3" y="4" width="18" height="16" rx="2" ry="2"></rect>
+            <path d="M3 10h18"></path>
+          </svg>
           <input
             type="text"
             name="emp_id"
@@ -85,6 +96,17 @@ export default function EmpAddForm({ onAdded, items }) {
 
         {/* Name */}
         <label className="input input-bordered w-full flex items-center gap-2">
+          <svg
+            className="h-4 w-4 opacity-50"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <circle cx="12" cy="7" r="4"></circle>
+            <path d="M6 21v-2a6 6 0 0112 0v2"></path>
+          </svg>
           <input
             type="text"
             name="name"
@@ -98,6 +120,17 @@ export default function EmpAddForm({ onAdded, items }) {
 
         {/* Email */}
         <label className="input input-bordered w-full flex items-center gap-2">
+          <svg
+            className="h-4 w-4 opacity-50"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="M4 4h16v16H4z"></path>
+            <path d="M4 4l8 8 8-8"></path>
+          </svg>
           <input
             type="email"
             name="email"
@@ -110,11 +143,21 @@ export default function EmpAddForm({ onAdded, items }) {
 
         {/* Position */}
         <label className="input input-bordered w-full flex items-center gap-2">
+          <svg
+            className="h-4 w-4 opacity-50"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 2l4 8H8l4-8zM2 22h20l-10-6-10 6z"></path>
+          </svg>
           <select
             name="position"
             value={formData.position}
             onChange={handleChange}
-            className="grow"
+            className="select select-ghost grow"
             required
           >
             <option value="">Position *</option>
@@ -131,11 +174,21 @@ export default function EmpAddForm({ onAdded, items }) {
 
         {/* Department */}
         <label className="input input-bordered w-full flex items-center gap-2">
+          <svg
+            className="h-4 w-4 opacity-50"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="M3 3h18v4H3zM3 10h18v11H3z"></path>
+          </svg>
           <select
             name="department"
             value={formData.department}
             onChange={handleChange}
-            className="grow"
+            className="select select-ghost grow"
             required
           >
             <option value="">Department *</option>
@@ -147,11 +200,22 @@ export default function EmpAddForm({ onAdded, items }) {
 
         {/* Client */}
         <label className="input input-bordered w-full flex items-center gap-2">
+          <svg
+            className="h-4 w-4 opacity-50"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            <path d="M12 14v7"></path>
+          </svg>
           <select
             name="client"
             value={formData.client}
             onChange={handleChange}
-            className="grow"
+            className="select select-ghost grow"
             required
           >
             <option value="">Client *</option>
@@ -163,11 +227,21 @@ export default function EmpAddForm({ onAdded, items }) {
 
         {/* Status */}
         <label className="input input-bordered w-full flex items-center gap-2">
+          <svg
+            className="h-4 w-4 opacity-50"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+          </svg>
           <select
             name="status"
             value={formData.status}
             onChange={handleChange}
-            className="grow"
+            className="select select-ghost grow"
             required
           >
             <option value="">Status *</option>
@@ -178,6 +252,16 @@ export default function EmpAddForm({ onAdded, items }) {
 
         {/* Contact */}
         <label className="input input-bordered w-full flex items-center gap-2">
+          <svg
+            className="h-4 w-4 opacity-50"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="M22 16.92V21a2 2 0 01-2.18 2A19.86 19.86 0 013 5.18 2 2 0 015 3h4.09a2 2 0 012 1.72c.12.81.37 1.61.73 2.34a2 2 0 01-.45 2.11L9.91 10a16 16 0 006.09 6.09l1.83-1.46a2 2 0 012.11-.45c.73.36 1.53.61 2.34.73a2 2 0 011.72 2z"></path>
+          </svg>
           <input
             type="text"
             name="contact"
@@ -190,11 +274,21 @@ export default function EmpAddForm({ onAdded, items }) {
 
         {/* Item Endorsed */}
         <label className="input input-bordered w-full flex items-center gap-2">
+          <svg
+            className="h-4 w-4 opacity-50"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 2l9 4-9 4-9-4 9-4zm0 8l9 4-9 4-9-4 9-4zm0 8l9 4-9 4-9-4 9-4z"></path>
+          </svg>
           <select
             name="item_endorsed"
             value={formData.item_endorsed || ""}
             onChange={handleChange}
-            className="grow"
+            className="select select-ghost grow"
           >
             <option value="">Item Endorsed</option>
             <option value="None">None</option>

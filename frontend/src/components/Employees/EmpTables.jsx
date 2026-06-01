@@ -19,7 +19,7 @@ const EmpTables = () => {
   }, {});
 
   return (
-    <div className="mx-auto max-w-7xl p-6 space-y-10">
+    <div className="py-6 space-y-8 overflow-x-auto">
       {Object.keys(groupedEmployees).length === 0 ? (
         <p className="text-center text-gray-500">No employees found.</p>
       ) : (
@@ -38,23 +38,23 @@ const EmpTables = () => {
               <table className="table table-xs">
                 <thead>
                   <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Dep</th>
-                    <th>Client</th>
-                    <th>Email</th>
-                    <th>Contact </th>
-                    <th>Endorsed</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th className="w-24">ID</th>
+                    <th className="w-40">Name</th>
+                    <th className="w-24">Position</th>
+                    <th className="w-20">Dep</th>
+                    <th className="w-40">Client</th>
+                    <th className="w-32">Email</th>
+                    <th className="w-32">Contact</th>
+                    <th className="w-32">Endorsed</th>
+                    <th className="w-24">Status</th>
+                    <th className="w-32">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {groupedEmployees[department].map((employee) => (
                     <tr key={employee._id}>
                       <td>{employee.emp_id}</td>
-                      <td className="font-medium">{employee.name}</td>
+                      <td className="font-sm">{employee.name}</td>
                       <td>
                         <span>{employee.position}</span>
                       </td>

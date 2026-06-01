@@ -30,11 +30,14 @@ const Inventory = () => {
       <div className="p-6">
         {/* Trigger button */}
         <button
-          className="btn btn-primary"
+          className="btn btn-sm btn-primary mr-2"
           onClick={() => document.getElementById("add_item_modal").showModal()}
         >
           + Add
         </button>
+
+        <button className="btn btn-sm btn-success mr-2">Excel</button>
+        <button className="btn btn-sm btn-warning mr-2">Purge</button>
 
         {/* Global modal with AddItemForm inside */}
         <GlobalModal id="add_item_modal" title="New Item">

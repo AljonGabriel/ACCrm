@@ -65,14 +65,14 @@ export default function AddItemForm({ onSetItems, employees }) {
             />
           </svg>
           <select
-            name="category"
+            defaultValue="Category..."
             value={formData.category}
             onChange={handleChange}
-            className="grow"
+            className="select select-ghost w-full"
             required
           >
-            <option value="" disabled>
-              Category...
+            <option disabled={true} value="">
+              Category
             </option>
             <option value="Headset">Headset</option>
             <option value="Printer">Printer</option>
@@ -154,9 +154,11 @@ export default function AddItemForm({ onSetItems, employees }) {
             name="status"
             value={formData.status}
             onChange={handleChange}
-            className="grow"
+            className="select select-ghost w-full"
           >
-            <option value="">Status...</option>
+            <option disabled={true} value="">
+              Status...
+            </option>
             <option value="Working">Working</option>
             <option value="Defective">Defective</option>
             <option value="Missing">Missing</option>
@@ -205,8 +207,11 @@ export default function AddItemForm({ onSetItems, employees }) {
             name="endorsed"
             value={formData.endorsed}
             onChange={handleChange}
-            className="grow"
+            className="select select-ghost w-full"
           >
+            <option disabled={true} value="">
+              Endorsed to?
+            </option>
             <option value="Not Endorsed">Not Endorsed</option>
             {employees.map((emp) => (
               <option key={emp._id} value={emp.name}>
