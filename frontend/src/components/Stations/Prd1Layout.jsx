@@ -4,6 +4,7 @@ import StationCard from "./StationsCard";
 import GlobalModal from "../GlobalModal";
 import StationAddInfoFrm from "./StationAddInfoFrm";
 import Skeleton from "react-loading-skeleton";
+import StationSpecFrm from "./StationsSpecForm";
 import "react-loading-skeleton/dist/skeleton.css";
 
 export default function StationsLayout({ stations, employees }) {
@@ -20,9 +21,14 @@ export default function StationsLayout({ stations, employees }) {
 
   const groupByLocation = (loc) => stations.filter((s) => s.location === loc);
 
-  const handleCardClick = (station) => {
+  const handleEditClick = (station) => {
     setSelectedStation(station);
-    setIsModalOpen(true);
+    document.getElementById("edit-station-modal").showModal();
+  };
+
+  const handleSpecsClick = (station) => {
+    setSelectedStation(station);
+    document.getElementById("specs-station-modal").showModal();
   };
 
   return (
@@ -38,9 +44,10 @@ export default function StationsLayout({ stations, employees }) {
               ))
             : groupByLocation("TL Front").map((station) => (
                 <StationCard
-                  key={station?._id}
+                  key={station._id}
                   station={station}
-                  onEdit={handleCardClick}
+                  onEdit={handleEditClick}
+                  onSpecs={handleSpecsClick}
                 />
               ))}
         </div>
@@ -56,9 +63,10 @@ export default function StationsLayout({ stations, employees }) {
                 ))
               : groupByLocation("Left Front").map((station) => (
                   <StationCard
-                    key={station?._id}
+                    key={station._id}
                     station={station}
-                    onEdit={handleCardClick}
+                    onEdit={handleEditClick}
+                    onSpecs={handleSpecsClick}
                   />
                 ))}
           </div>
@@ -78,12 +86,14 @@ export default function StationsLayout({ stations, employees }) {
                         <StationCard
                           key={backStation?._id}
                           station={backStation}
-                          onEdit={handleCardClick}
+                          onEdit={handleEditClick}
+                          onSpecs={handleSpecsClick}
                         />
                       )}
                       <StationCard
                         station={frontStation}
-                        onEdit={handleCardClick}
+                        onEdit={handleEditClick}
+                        onSpecs={handleSpecsClick}
                       />
                     </div>
                   );
@@ -103,19 +113,30 @@ export default function StationsLayout({ stations, employees }) {
                 <StationCard
                   key={station?._id}
                   station={station}
-                  onEdit={handleCardClick}
+                  onEdit={handleEditClick}
+                  onSpecs={handleSpecsClick}
                 />
               ))}
         </div>
       </section>
 
-      {/* Global Modal */}
-      <GlobalModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      {/* Edit Modal */}
+      <GlobalModal title="Update Station" id="edit-station-modal">
         {selectedStation && (
           <StationAddInfoFrm
             station={selectedStation}
             employees={employees}
-            onClose={() => setIsModalOpen(false)}
+            onClose={() => setSelectedStation(null)}
+          />
+        )}
+      </GlobalModal>
+
+      {/* Specs Modal */}
+      <GlobalModal title="Station Specs" id="specs-station-modal">
+        {selectedStation && (
+          <StationSpecFrm
+            station={selectedStation}
+            onClose={() => setSelectedStation(null)}
           />
         )}
       </GlobalModal>

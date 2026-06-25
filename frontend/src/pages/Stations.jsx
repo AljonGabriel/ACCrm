@@ -27,6 +27,8 @@ const Stations = () => {
       .catch((err) => console.error("Error fetching employees:", err));
   }, []);
 
+  console.log("employees state:", employees);
+
   return (
     <>
       <Navbar />

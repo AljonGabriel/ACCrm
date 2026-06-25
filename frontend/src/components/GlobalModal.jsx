@@ -12,7 +12,7 @@ const GlobalModal = ({ id = "my_modal", title, children }) => {
         </form>
 
         {/* Title */}
-        {title && <h3 className="font-bold text-lg mb-4">{title}</h3>}
+        {title && <h3 className="font-bold text-lg">{title}</h3>}
 
         {/* Content */}
         <div>{children}</div>

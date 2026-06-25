@@ -1,5 +1,9 @@
 // StationCard.jsx
-export default function StationCard({ station, onEdit }) {
+import GlobalModal from "../GlobalModal";
+import StationAddInfoFrm from "./StationAddInfoFrm";
+
+// StationCard.jsx
+export default function StationCard({ station, onEdit, onSpecs }) {
   return (
     <div
       className={`w-40 h-auto border p-2 text-left shadow-md rounded-lg ${
@@ -26,13 +30,20 @@ export default function StationCard({ station, onEdit }) {
         {station?.anydesk_id || "No Anydesk"}
       </p>
 
-      {/* ✅ Button triggers modal */}
-      <div className="mt-3 flex justify-center">
+      {/* ✅ Buttons trigger parent handler */}
+      <div className="mt-3 flex justify-center gap-2">
         <button
-          onClick={() => onEdit(station)}
+          onClick={() => onEdit(station)} // pass station up
           className="bg-blue-500 text-white text-xs px-3 py-1 rounded hover:bg-blue-600 transition"
         >
           Edit
+        </button>
+
+        <button
+          onClick={() => onSpecs(station)} // you can differentiate later
+          className="bg-yellow-500 text-white text-xs px-3 py-1 rounded hover:bg-yellow-600 transition"
+        >
+          Specs
         </button>
       </div>
     </div>
