@@ -7,11 +7,12 @@ export default function StationAddInfoFrm({ station, onClose, employees }) {
   const [hostname, setHostname] = useState(station?.hostname || "");
   const [ip, setIp] = useState(station?.ip || "");
   const [status, setStatus] = useState(station?.status || "Offline");
-  const [production, setProduction] = useState(station?.production || "Prod 1");
+  const [production, setProduction] = useState(station?.production);
   const [location, setLocation] = useState(station?.location || "");
   const [anydeskId, setAnydeskId] = useState(station?.anydesk_id || "");
   const [macAddress, setMacAddress] = useState(station?.mac_address || "");
   const [stationed, setStationed] = useState(station?.stationed || "");
+  const [specs, setSpecs] = useState(station?.specs || "");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,6 +29,7 @@ export default function StationAddInfoFrm({ station, onClose, employees }) {
           anydesk_id: DOMPurify.sanitize(anydeskId.trim()),
           mac_address: DOMPurify.sanitize(macAddress.trim()),
           stationed: DOMPurify.sanitize(stationed.trim()),
+          specs: DOMPurify.sanitize(specs.trim()),
         },
       );
       alert(response.data.message || "Station updated successfully!");
@@ -114,6 +116,17 @@ export default function StationAddInfoFrm({ station, onClose, employees }) {
             </option>
           ))}
         </select>
+      </div>
+
+      {/* Specs */}
+      <div>
+        <label className="block text-sm font-medium">Specs</label>
+        <textarea
+          value={specs}
+          onChange={(e) => setSpecs(e.target.value)}
+          className="w-full border p-2 rounded h-32"
+          placeholder="Paste specs here..."
+        />
       </div>
 
       {/* Buttons */}

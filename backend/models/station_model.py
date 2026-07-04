@@ -10,3 +10,4 @@ class Station(BaseModel):
     anydesk_id: Optional[str] = None   # Remote support ID
     mac_address: Optional[str] = None  # Device MAC address
     stationed: Optional[str] = None    # Assigned user or department
+    specs: Optional[str] = None          # Device specifications

@@ -1,9 +1,6 @@
 // StationCard.jsx
-import GlobalModal from "../GlobalModal";
-import StationAddInfoFrm from "./StationAddInfoFrm";
-
-// StationCard.jsx
 export default function StationCard({ station, onEdit, onSpecs }) {
+  console.log("specs", station?.specs);
   return (
     <div
       className={`w-40 h-auto border p-2 text-left shadow-md rounded-lg ${

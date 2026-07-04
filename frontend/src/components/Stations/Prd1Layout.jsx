@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import StationCard from "./StationsCard";
 import GlobalModal from "../GlobalModal";
 import StationAddInfoFrm from "./StationAddInfoFrm";
@@ -8,12 +7,12 @@ import StationSpecFrm from "./StationsSpecForm";
 import "react-loading-skeleton/dist/skeleton.css";
 
 export default function StationsLayout({ stations, employees }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStation, setSelectedStation] = useState(null);
+  const [modalType, setModalType] = useState(null); // "edit" or "specs"
   const [loading, setLoading] = useState(true);
 
+  console.log("selectedStation", selectedStation);
   useEffect(() => {
-    // simulate loading delay if stations are passed async
     if (stations && stations.length > 0) {
       setLoading(false);
     }
@@ -21,15 +20,23 @@ export default function StationsLayout({ stations, employees }) {
 
   const groupByLocation = (loc) => stations.filter((s) => s.location === loc);
 
-  const handleEditClick = (station) => {
+  const openModal = (station, type) => {
     setSelectedStation(station);
-    document.getElementById("edit-station-modal").showModal();
+    setModalType(type);
+    const modalId =
+      type === "edit" ? "edit-station-modal" : "specs-station-modal";
+    document.getElementById(modalId)?.showModal();
   };
 
-  const handleSpecsClick = (station) => {
-    setSelectedStation(station);
-    document.getElementById("specs-station-modal").showModal();
+  const closeModal = () => {
+    setSelectedStation(null);
+    setModalType(null);
   };
+
+  const renderSkeletons = (count, height = 80) =>
+    Array.from({ length: count }).map((_, idx) => (
+      <Skeleton key={idx} height={height} className="rounded-md" />
+    ));
 
   return (
     <div className="mx-auto max-w-6xl p-6">
@@ -39,15 +46,13 @@ export default function StationsLayout({ stations, employees }) {
       <section className="flex justify-center mb-4">
         <div className="grid grid-cols-3 gap-2">
           {loading
-            ? Array.from({ length: 3 }).map((_, idx) => (
-                <Skeleton key={idx} height={100} className="rounded-md" />
-              ))
+            ? renderSkeletons(3, 100)
             : groupByLocation("TL Front").map((station) => (
                 <StationCard
                   key={station._id}
                   station={station}
-                  onEdit={handleEditClick}
-                  onSpecs={handleSpecsClick}
+                  onEdit={() => openModal(station, "edit")}
+                  onSpecs={() => openModal(station, "specs")}
                 />
               ))}
         </div>
@@ -58,15 +63,13 @@ export default function StationsLayout({ stations, employees }) {
         <div className="flex-1">
           <div className="flex flex-col gap-2">
             {loading
-              ? Array.from({ length: 6 }).map((_, idx) => (
-                  <Skeleton key={idx} height={80} className="rounded-md" />
-                ))
+              ? renderSkeletons(6)
               : groupByLocation("Left Front").map((station) => (
                   <StationCard
                     key={station._id}
                     station={station}
-                    onEdit={handleEditClick}
-                    onSpecs={handleSpecsClick}
+                    onEdit={() => openModal(station, "edit")}
+                    onSpecs={() => openModal(station, "specs")}
                   />
                 ))}
           </div>
@@ -75,25 +78,23 @@ export default function StationsLayout({ stations, employees }) {
         <div className="flex-1">
           <div className="flex flex-col items-end gap-2">
             {loading
-              ? Array.from({ length: 7 }).map((_, idx) => (
-                  <Skeleton key={idx} height={80} className="rounded-md" />
-                ))
+              ? renderSkeletons(7)
               : groupByLocation("Right Front").map((frontStation, idx) => {
                   const backStation = groupByLocation("Right Back")[idx];
                   return (
                     <div key={frontStation?._id} className="flex gap-2">
                       {backStation && (
                         <StationCard
-                          key={backStation?._id}
+                          key={backStation._id}
                           station={backStation}
-                          onEdit={handleEditClick}
-                          onSpecs={handleSpecsClick}
+                          onEdit={() => openModal(backStation, "edit")}
+                          onSpecs={() => openModal(backStation, "specs")}
                         />
                       )}
                       <StationCard
                         station={frontStation}
-                        onEdit={handleEditClick}
-                        onSpecs={handleSpecsClick}
+                        onEdit={() => openModal(frontStation, "edit")}
+                        onSpecs={() => openModal(frontStation, "specs")}
                       />
                     </div>
                   );
@@ -106,37 +107,35 @@ export default function StationsLayout({ stations, employees }) {
       <section className="flex justify-start mt-4">
         <div className="grid grid-cols-2 gap-2">
           {loading
-            ? Array.from({ length: 4 }).map((_, idx) => (
-                <Skeleton key={idx} height={80} className="rounded-md" />
-              ))
+            ? renderSkeletons(4)
             : groupByLocation("Back-to-Back").map((station) => (
                 <StationCard
-                  key={station?._id}
+                  key={station._id}
                   station={station}
-                  onEdit={handleEditClick}
-                  onSpecs={handleSpecsClick}
+                  onEdit={() => openModal(station, "edit")}
+                  onSpecs={() => openModal(station, "specs")}
                 />
               ))}
         </div>
       </section>
 
-      {/* Edit Modal */}
       <GlobalModal title="Update Station" id="edit-station-modal">
-        {selectedStation && (
+        {selectedStation && modalType === "edit" && (
           <StationAddInfoFrm
+            key={selectedStation._id} // 🔹 forces remount
             station={selectedStation}
             employees={employees}
-            onClose={() => setSelectedStation(null)}
+            onClose={closeModal}
           />
         )}
       </GlobalModal>
 
-      {/* Specs Modal */}
       <GlobalModal title="Station Specs" id="specs-station-modal">
-        {selectedStation && (
+        {selectedStation && modalType === "specs" && (
           <StationSpecFrm
+            key={selectedStation._id} // 🔹 forces remount
             station={selectedStation}
-            onClose={() => setSelectedStation(null)}
+            onClose={closeModal}
           />
         )}
       </GlobalModal>
